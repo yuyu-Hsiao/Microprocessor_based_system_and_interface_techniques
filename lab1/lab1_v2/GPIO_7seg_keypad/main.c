@@ -46,7 +46,6 @@ void Scan_Seg(void){
 	counter[0]++;
 	if(counter[0]>3){
 		counter[0]=0;
-		//key_value = key_temp;
 	}
 }
 
