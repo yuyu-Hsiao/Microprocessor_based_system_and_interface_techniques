@@ -20729,15 +20729,24 @@ uint8_t id[4] = {3, 1, 0, 5};
 void Display_7seg(uint16_t value)
 {
 	uint8_t i;
-	if(value!=0){
-		id[0] = value;
-	}else{
-		id[0] = 3;
-	}
+	
+
+
+
+
+
+ 
 	
   for(i=0;i<4;i++){
 		CloseSevenSegment();
-		ShowSevenSegment(i,id[i]);
+		if(value!=0 & i==0){
+			id[0] = value;
+			ShowSevenSegment(0,id[0]);
+		}
+		if(value==0){
+			id[0] = 3;
+			ShowSevenSegment(i,id[i]);
+		}
 		CLK_SysTickDelay(5000);		
 	}
 }
