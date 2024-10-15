@@ -22017,6 +22017,7 @@ uint32_t cmdIndex = 0;
 int32_t main(void);
 void UART_TEST_HANDLE(void);
 void UART_FunctionTest(void);
+void ParseCommand(char *command);
 
 
 void SYS_Init(void)
@@ -22071,16 +22072,6 @@ void UART0_Init()
     UART_Open(((UART_T *) ((( uint32_t)0x40000000) + 0x50000)), 9600);
 }
 
- 
- 
- 
- 
- 
-
- 
- 
- 
-
 
 void GPIO_Init(void)
 {
@@ -22093,37 +22084,7 @@ void GPIO_Init(void)
     (*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(2))) + ((14)<<2)))) = 1;
 }
 
-void ParseCommand(char *command)
-{
-    if (strcmp(command, "red on") == 0)
-    {
-        (*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(0))) + ((14)<<2)))) = 0; 
-    }
-    else if (strcmp(command, "red off") == 0)
-    {
-        (*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(0))) + ((14)<<2)))) = 1; 
-    }
-    else if (strcmp(command, "green on") == 0)
-    {
-        (*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(0))) + ((13)<<2)))) = 0; 
-    }
-    else if (strcmp(command, "green off") == 0)
-    {
-        (*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(0))) + ((13)<<2)))) = 1; 
-    }
-    else if (strcmp(command, "blue on") == 0)
-    {
-        (*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(0))) + ((12)<<2)))) = 0; 
-    }
-    else if (strcmp(command, "blue off") == 0)
-    {
-        (*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(0))) + ((12)<<2)))) = 1; 
-    }
-    else
-    {
-        printf("Unknown command: %s\n", command);
-    }
-}
+
 
 
 int main(void)
@@ -22207,7 +22168,7 @@ void UART_TEST_HANDLE()
 						
 												
 						
-            if(u8InChar == '\r' || u8InChar == '\n')
+            if(u8InChar == 0x0D)
             {
                 cmdBuffer[cmdIndex] = '\0';
                 cmdIndex = 0;
@@ -22279,5 +22240,37 @@ void UART_FunctionTest()
     g_bWait = 1;
     printf("\nUART Sample Demo End.\n");
 
+}
+
+void ParseCommand(char *command)
+{
+    if (strcmp(command, "red on") == 0)
+    {
+        (*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(0))) + ((14)<<2)))) = 0; 
+    }
+    else if (strcmp(command, "red off") == 0)
+    {
+        (*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(0))) + ((14)<<2)))) = 1; 
+    }
+    else if (strcmp(command, "green on") == 0)
+    {
+        (*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(0))) + ((13)<<2)))) = 0; 
+    }
+    else if (strcmp(command, "green off") == 0)
+    {
+        (*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(0))) + ((13)<<2)))) = 1; 
+    }
+    else if (strcmp(command, "blue on") == 0)
+    {
+        (*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(0))) + ((12)<<2)))) = 0; 
+    }
+    else if (strcmp(command, "blue off") == 0)
+    {
+        (*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(0))) + ((12)<<2)))) = 1; 
+    }
+    else
+    {
+        printf("Unknown command: %s\n", command);
+    }
 }
 

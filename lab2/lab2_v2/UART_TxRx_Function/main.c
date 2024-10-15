@@ -47,6 +47,7 @@ uint32_t cmdIndex = 0;
 int32_t main(void);
 void UART_TEST_HANDLE(void);
 void UART_FunctionTest(void);
+void ParseCommand(char *command);
 
 
 void SYS_Init(void)
@@ -100,18 +101,6 @@ void UART0_Init()
     /* Configure UART0 and set UART0 Baudrate */
     UART_Open(UART0, 9600);
 }
-
-/*---------------------------------------------------------------------------------------------------------*/
-/* UART Test Sample                                                                                        */
-/* Test Item                                                                                               */
-/* It sends the received data to HyperTerminal.                                                            */
-/*---------------------------------------------------------------------------------------------------------*/
-
-/*---------------------------------------------------------------------------------------------------------*/
-/* MAIN function                                                                                           */
-/*---------------------------------------------------------------------------------------------------------*/
-
-
 void GPIO_Init(void)
 {
     GPIO_SetMode(PC, BIT12, GPIO_PMD_OUTPUT);
@@ -123,37 +112,7 @@ void GPIO_Init(void)
     PC14 = 1;
 }
 
-void ParseCommand(char *command)
-{
-    if (strcmp(command, "red on") == 0)
-    {
-        PA14 = 0; // ???? LED(???)
-    }
-    else if (strcmp(command, "red off") == 0)
-    {
-        PA14 = 1; // ???? LED
-    }
-    else if (strcmp(command, "green on") == 0)
-    {
-        PA13 = 0; // ???? LED
-    }
-    else if (strcmp(command, "green off") == 0)
-    {
-        PA13 = 1; // ???? LED
-    }
-    else if (strcmp(command, "blue on") == 0)
-    {
-        PA12 = 0; // ???? LED
-    }
-    else if (strcmp(command, "blue off") == 0)
-    {
-        PA12 = 1; // ???? LED
-    }
-    else
-    {
-        printf("Unknown command: %s\n", command);
-    }
-}
+
 
 
 int main(void)
@@ -237,7 +196,7 @@ void UART_TEST_HANDLE()
 						
 												
 						
-            if(u8InChar == '\r' || u8InChar == '\n')
+            if(u8InChar == 0x0D)
             {
                 cmdBuffer[cmdIndex] = '\0';
                 cmdIndex = 0;
@@ -256,10 +215,7 @@ void UART_TEST_HANDLE()
                     printf("\nCommand too long!\n");
                     printf("\nInput:");
                 }
-            }
-						
-					
-						
+            }						
         }
     }
 		
@@ -309,5 +265,37 @@ void UART_FunctionTest()
     g_bWait = TRUE;
     printf("\nUART Sample Demo End.\n");
 
+}
+
+void ParseCommand(char *command)
+{
+    if (strcmp(command, "red on") == 0)
+    {
+        PA14 = 0; 
+    }
+    else if (strcmp(command, "red off") == 0)
+    {
+        PA14 = 1; 
+    }
+    else if (strcmp(command, "green on") == 0)
+    {
+        PA13 = 0; 
+    }
+    else if (strcmp(command, "green off") == 0)
+    {
+        PA13 = 1; 
+    }
+    else if (strcmp(command, "blue on") == 0)
+    {
+        PA12 = 0; 
+    }
+    else if (strcmp(command, "blue off") == 0)
+    {
+        PA12 = 1; 
+    }
+    else
+    {
+        printf("Unknown command: %s\n", command);
+    }
 }
 
