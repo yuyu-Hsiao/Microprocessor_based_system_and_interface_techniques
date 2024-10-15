@@ -23,6 +23,8 @@
 
 #define RXBUFSIZE 1024
 
+#define CMD_BUFSIZE 64
+
 /*---------------------------------------------------------------------------------------------------------*/
 /* Global variables                                                                                        */
 /*---------------------------------------------------------------------------------------------------------*/
@@ -35,6 +37,9 @@ volatile int32_t g_bWait         = TRUE;
 
 volatile int32_t g_bEnter        = FALSE;
 
+
+char cmdBuffer[CMD_BUFSIZE];
+uint32_t cmdIndex = 0;
 
 /*---------------------------------------------------------------------------------------------------------*/
 /* Define functions prototype                                                                              */
@@ -118,7 +123,6 @@ void GPIO_Init(void)
     PC14 = 1;
 }
 
-
 void ParseCommand(char *command)
 {
     if (strcmp(command, "red on") == 0)
@@ -150,6 +154,7 @@ void ParseCommand(char *command)
         printf("Unknown command: %s\n", command);
     }
 }
+
 
 int main(void)
 {
@@ -218,9 +223,7 @@ void UART_TEST_HANDLE()
             }
 						
 						if(u8InChar == 0x0D){
-								g_bEnter = TRUE;
-								printf("%c ", g_u8RecData[g_u32comRhead]);
-								
+								g_bEnter = TRUE;			
 						}
 
             /* Check if buffer full */
@@ -231,24 +234,35 @@ void UART_TEST_HANDLE()
                 g_u32comRtail = (g_u32comRtail == (RXBUFSIZE - 1)) ? 0 : (g_u32comRtail + 1);
                 g_u32comRbytes++;
             }
+						
+												
+						
+            if(u8InChar == '\r' || u8InChar == '\n')
+            {
+                cmdBuffer[cmdIndex] = '\0';
+                cmdIndex = 0;
+								ParseCommand(cmdBuffer);
+                
+            }
+            else
+            {
+                if(cmdIndex < CMD_BUFSIZE - 1)
+                {
+                    cmdBuffer[cmdIndex++] = u8InChar;
+                }
+                else
+                {
+                    cmdIndex = 0;
+                    printf("\nCommand too long!\n");
+                    printf("\nInput:");
+                }
+            }
+						
+					
+						
         }
-        //fprintf("\nTransmission Test:");
     }
 		
-		/*
-    if(u32IntSts & UART_ISR_THRE_INT_Msk)
-    {
-        uint16_t tmp;
-        tmp = g_u32comRtail;
-        if(g_u32comRhead != tmp)
-        {
-            u8InChar = g_u8RecData[g_u32comRhead];
-            UART_WRITE(UART0, u8InChar);
-            g_u32comRhead = (g_u32comRhead == (RXBUFSIZE - 1)) ? 0 : (g_u32comRhead + 1);
-            g_u32comRbytes--;
-        }
-    }
-		*/
     if(u32IntSts & UART_ISR_THRE_INT_Msk)
     {
 			if(g_bEnter){

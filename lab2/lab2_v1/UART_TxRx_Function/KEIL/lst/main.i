@@ -21993,6 +21993,8 @@ void ACMP_Close(ACMP_T *, uint32_t u32ChNum);
 
 
 
+
+
  
  
  
@@ -22005,6 +22007,9 @@ volatile int32_t g_bWait         = 1;
 
 volatile int32_t g_bEnter        = 0;
 
+
+char cmdBuffer[64];
+uint32_t cmdIndex = 0;
 
  
  
@@ -22088,7 +22093,6 @@ void GPIO_Init(void)
     (*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(2))) + ((14)<<2)))) = 1;
 }
 
-
 void ParseCommand(char *command)
 {
     if (strcmp(command, "red on") == 0)
@@ -22120,6 +22124,7 @@ void ParseCommand(char *command)
         printf("Unknown command: %s\n", command);
     }
 }
+
 
 int main(void)
 {
@@ -22188,9 +22193,7 @@ void UART_TEST_HANDLE()
             }
 						
 						if(u8InChar == 0x0D){
-								g_bEnter = 1;
-								printf("%c ", g_u8RecData[g_u32comRhead]);
-								
+								g_bEnter = 1;			
 						}
 
              
@@ -22201,24 +22204,35 @@ void UART_TEST_HANDLE()
                 g_u32comRtail = (g_u32comRtail == (1024 - 1)) ? 0 : (g_u32comRtail + 1);
                 g_u32comRbytes++;
             }
+						
+												
+						
+            if(u8InChar == '\r' || u8InChar == '\n')
+            {
+                cmdBuffer[cmdIndex] = '\0';
+                cmdIndex = 0;
+								ParseCommand(cmdBuffer);
+                
+            }
+            else
+            {
+                if(cmdIndex < 64 - 1)
+                {
+                    cmdBuffer[cmdIndex++] = u8InChar;
+                }
+                else
+                {
+                    cmdIndex = 0;
+                    printf("\nCommand too long!\n");
+                    printf("\nInput:");
+                }
+            }
+						
+					
+						
         }
-        
     }
 		
-		
-
-
-
-
-
-
-
-
-
-
-
-
- 
     if(u32IntSts & (1ul << 9))
     {
 			if(g_bEnter){
