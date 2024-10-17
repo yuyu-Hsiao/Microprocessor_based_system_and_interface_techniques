@@ -22003,9 +22003,9 @@ uint8_t g_u8RecData[1024]  = {0};
 volatile uint32_t g_u32comRbytes = 0;
 volatile uint32_t g_u32comRhead  = 0;
 volatile uint32_t g_u32comRtail  = 0;
-volatile int32_t g_bWait         = 1;
 
 volatile int32_t g_bEnter        = 0;
+volatile int32_t sendComplete    = 0;
 
 
 char cmdBuffer[64];
@@ -22017,7 +22017,6 @@ uint32_t cmdIndex = 0;
 int32_t main(void);
 void UART_TEST_HANDLE(void);
 void UART_FunctionTest(void);
-void ParseCommand(char *command);
 
 
 void SYS_Init(void)
@@ -22072,19 +22071,62 @@ void UART0_Init()
     UART_Open(((UART_T *) ((( uint32_t)0x40000000) + 0x50000)), 9600);
 }
 
+ 
+ 
+ 
+ 
+ 
+
+ 
+ 
+ 
+
 
 void GPIO_Init(void)
 {
-    GPIO_SetMode(((GPIO_T *) (((( uint32_t)0x50000000) + 0x4000) + 0x0080)), 0x00001000, 0x1UL);
-    GPIO_SetMode(((GPIO_T *) (((( uint32_t)0x50000000) + 0x4000) + 0x0080)), 0x00002000, 0x1UL);
-    GPIO_SetMode(((GPIO_T *) (((( uint32_t)0x50000000) + 0x4000) + 0x0080)), 0x00004000, 0x1UL);
+    GPIO_SetMode(((GPIO_T *) (((( uint32_t)0x50000000) + 0x4000) )), 0x00001000, 0x1UL);
+    GPIO_SetMode(((GPIO_T *) (((( uint32_t)0x50000000) + 0x4000) )), 0x00002000, 0x1UL);
+    GPIO_SetMode(((GPIO_T *) (((( uint32_t)0x50000000) + 0x4000) )), 0x00004000, 0x1UL);
 
-    (*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(2))) + ((12)<<2)))) = 1;
-    (*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(2))) + ((13)<<2)))) = 1;
-    (*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(2))) + ((14)<<2)))) = 1;
+    (*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(0))) + ((12)<<2)))) = 1;
+    (*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(0))) + ((13)<<2)))) = 1;
+    (*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(0))) + ((14)<<2)))) = 1;
+
 }
 
+void ParseCommand(char *command)
+{
+    if (strcmp(command, "red on") == 0)
+    {
+        (*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(0))) + ((14)<<2)))) = 0; 
+    }
+    else if (strcmp(command, "red off") == 0)
+    {
+        (*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(0))) + ((14)<<2)))) = 1; 
+    }
+    else if (strcmp(command, "green on") == 0)
+    {
+        (*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(0))) + ((13)<<2)))) = 0; 
+    }
+    else if (strcmp(command, "green off") == 0)
+    {
+        (*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(0))) + ((13)<<2)))) = 1; 
+    }
+    else if (strcmp(command, "blue on") == 0)
+    {
+        (*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(0))) + ((12)<<2)))) = 0; 
+    }
+    else if (strcmp(command, "blue off") == 0)
+    {
+        (*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(0))) + ((12)<<2)))) = 1; 
+    }
+		
 
+
+
+
+ 
+}
 
 
 int main(void)
@@ -22114,7 +22156,13 @@ int main(void)
      
     UART_FunctionTest();
 
-    while(1);
+    while(1){
+        if(sendComplete)
+        {
+            printf("\nInput:\n");
+            sendComplete = 0; 
+        }
+		}
 
 }
 
@@ -22138,24 +22186,11 @@ void UART_TEST_HANDLE()
 
     if(u32IntSts & (1ul << 8))
     {
-        
-
          
         while((((((UART_T *) ((( uint32_t)0x40000000) + 0x50000)))->ISR & (1ul << 0))>>0))
         {
              
             u8InChar = ((((UART_T *) ((( uint32_t)0x40000000) + 0x50000)))->RBR);
-
-            
-
-            if(u8InChar == '0')
-            {
-                g_bWait = 0;
-            }
-						
-						if(u8InChar == 0x0D){
-								g_bEnter = 1;			
-						}
 
              
             if(g_u32comRbytes < 1024)
@@ -22170,6 +22205,7 @@ void UART_TEST_HANDLE()
 						
             if(u8InChar == 0x0D)
             {
+								g_bEnter = 1;
                 cmdBuffer[cmdIndex] = '\0';
                 cmdIndex = 0;
 								ParseCommand(cmdBuffer);
@@ -22205,10 +22241,16 @@ void UART_TEST_HANDLE()
 							((((UART_T *) ((( uint32_t)0x40000000) + 0x50000)))->THR = (u8InChar));
 							g_u32comRhead = (g_u32comRhead == (1024 - 1)) ? 0 : (g_u32comRhead + 1);
 							g_u32comRbytes--;
-					}else{
-							g_bEnter = 0;
-							printf("\nInput:");
 					}
+					if(g_u32comRhead == tmp)
+					{
+							
+							g_bEnter = 0;							
+							
+					}
+			}
+			else{
+				sendComplete = 1;
 			}
     }
 					
@@ -22222,55 +22264,8 @@ void UART_FunctionTest()
     printf("LAB2-UART");
 		printf("\nInput:");
 
-
-    
-
-
-
-
- 
-
      
 		 
     UART_EnableInt(((UART_T *) ((( uint32_t)0x40000000) + 0x50000)), ((1ul << 0) | (1ul << 1) | (1ul << 4)));
-    while(g_bWait);
-
-     
-    UART_DisableInt(((UART_T *) ((( uint32_t)0x40000000) + 0x50000)), ((1ul << 0) | (1ul << 1) | (1ul << 4)));
-    g_bWait = 1;
-    printf("\nUART Sample Demo End.\n");
-
-}
-
-void ParseCommand(char *command)
-{
-    if (strcmp(command, "red on") == 0)
-    {
-        (*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(0))) + ((14)<<2)))) = 0; 
-    }
-    else if (strcmp(command, "red off") == 0)
-    {
-        (*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(0))) + ((14)<<2)))) = 1; 
-    }
-    else if (strcmp(command, "green on") == 0)
-    {
-        (*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(0))) + ((13)<<2)))) = 0; 
-    }
-    else if (strcmp(command, "green off") == 0)
-    {
-        (*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(0))) + ((13)<<2)))) = 1; 
-    }
-    else if (strcmp(command, "blue on") == 0)
-    {
-        (*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(0))) + ((12)<<2)))) = 0; 
-    }
-    else if (strcmp(command, "blue off") == 0)
-    {
-        (*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(0))) + ((12)<<2)))) = 1; 
-    }
-    else
-    {
-        printf("Unknown command: %s\n", command);
-    }
 }
 

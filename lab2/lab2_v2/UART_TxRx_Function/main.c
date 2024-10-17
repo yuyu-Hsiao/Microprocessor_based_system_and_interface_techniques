@@ -33,9 +33,9 @@ uint8_t g_u8RecData[RXBUFSIZE]  = {0};
 volatile uint32_t g_u32comRbytes = 0;
 volatile uint32_t g_u32comRhead  = 0;
 volatile uint32_t g_u32comRtail  = 0;
-volatile int32_t g_bWait         = TRUE;
 
 volatile int32_t g_bEnter        = FALSE;
+volatile int32_t sendComplete    = FALSE;
 
 
 char cmdBuffer[CMD_BUFSIZE];
@@ -47,7 +47,6 @@ uint32_t cmdIndex = 0;
 int32_t main(void);
 void UART_TEST_HANDLE(void);
 void UART_FunctionTest(void);
-void ParseCommand(char *command);
 
 
 void SYS_Init(void)
@@ -101,18 +100,63 @@ void UART0_Init()
     /* Configure UART0 and set UART0 Baudrate */
     UART_Open(UART0, 9600);
 }
+
+/*---------------------------------------------------------------------------------------------------------*/
+/* UART Test Sample                                                                                        */
+/* Test Item                                                                                               */
+/* It sends the received data to HyperTerminal.                                                            */
+/*---------------------------------------------------------------------------------------------------------*/
+
+/*---------------------------------------------------------------------------------------------------------*/
+/* MAIN function                                                                                           */
+/*---------------------------------------------------------------------------------------------------------*/
+
+
 void GPIO_Init(void)
 {
-    GPIO_SetMode(PC, BIT12, GPIO_PMD_OUTPUT);
-    GPIO_SetMode(PC, BIT13, GPIO_PMD_OUTPUT);
-    GPIO_SetMode(PC, BIT14, GPIO_PMD_OUTPUT);
+    GPIO_SetMode(PA, BIT12, GPIO_PMD_OUTPUT);
+    GPIO_SetMode(PA, BIT13, GPIO_PMD_OUTPUT);
+    GPIO_SetMode(PA, BIT14, GPIO_PMD_OUTPUT);
 
-    PC12 = 1;
-    PC13 = 1;
-    PC14 = 1;
+    PA12 = 1;
+    PA13 = 1;
+    PA14 = 1;
+
 }
 
-
+void ParseCommand(char *command)
+{
+    if (strcmp(command, "red on") == 0)
+    {
+        PA14 = 0; // ???? LED(???)
+    }
+    else if (strcmp(command, "red off") == 0)
+    {
+        PA14 = 1; // ???? LED
+    }
+    else if (strcmp(command, "green on") == 0)
+    {
+        PA13 = 0; // ???? LED
+    }
+    else if (strcmp(command, "green off") == 0)
+    {
+        PA13 = 1; // ???? LED
+    }
+    else if (strcmp(command, "blue on") == 0)
+    {
+        PA12 = 0; // ???? LED
+    }
+    else if (strcmp(command, "blue off") == 0)
+    {
+        PA12 = 1; // ???? LED
+    }
+		/*
+    else
+    {
+        printf("Unknown command: %s\n", command);
+    }
+		*/
+}
 
 
 int main(void)
@@ -142,7 +186,13 @@ int main(void)
     /* UART sample function */
     UART_FunctionTest();
 
-    while(1);
+    while(1){
+        if(sendComplete)
+        {
+            printf("\nInput:\n");
+            sendComplete = FALSE; 
+        }
+		}
 
 }
 
@@ -166,24 +216,11 @@ void UART_TEST_HANDLE()
 
     if(u32IntSts & UART_ISR_RDA_INT_Msk)
     {
-        //printf("\nInput:");
-
         /* Get all the input characters */
         while(UART_IS_RX_READY(UART0))
         {
             /* Get the character + */
             u8InChar = UART_READ(UART0);
-
-            //printf("%c ", u8InChar);
-
-            if(u8InChar == '0')
-            {
-                g_bWait = FALSE;
-            }
-						
-						if(u8InChar == 0x0D){
-								g_bEnter = TRUE;			
-						}
 
             /* Check if buffer full */
             if(g_u32comRbytes < RXBUFSIZE)
@@ -198,6 +235,7 @@ void UART_TEST_HANDLE()
 						
             if(u8InChar == 0x0D)
             {
+								g_bEnter = TRUE;
                 cmdBuffer[cmdIndex] = '\0';
                 cmdIndex = 0;
 								ParseCommand(cmdBuffer);
@@ -215,7 +253,10 @@ void UART_TEST_HANDLE()
                     printf("\nCommand too long!\n");
                     printf("\nInput:");
                 }
-            }						
+            }
+						
+					
+						
         }
     }
 		
@@ -230,10 +271,16 @@ void UART_TEST_HANDLE()
 							UART_WRITE(UART0, u8InChar);
 							g_u32comRhead = (g_u32comRhead == (RXBUFSIZE - 1)) ? 0 : (g_u32comRhead + 1);
 							g_u32comRbytes--;
-					}else{
-							g_bEnter = FALSE;
-							printf("\nInput:");
 					}
+					if(g_u32comRhead == tmp)
+					{
+							
+							g_bEnter = FALSE;							
+							//printf("\nInput:");
+					}
+			}
+			else{
+				sendComplete = TRUE;
 			}
     }
 					
@@ -247,55 +294,8 @@ void UART_FunctionTest()
     printf("LAB2-UART");
 		printf("\nInput:");
 
-
-    /*
-        Using a RS232 cable to connect UART0 and PC.
-        UART0 is set to debug port. UART0 is enable RDA and RLS interrupt.
-        When inputting char to terminal screen, RDA interrupt will happen and
-        UART0 will print the received char on screen.
-    */
-
     /* Enable Interrupt and install the call back function */
 		/*--RDA THRE TIME_OUT enable--*/
     UART_EnableInt(UART0, (UART_IER_RDA_IEN_Msk | UART_IER_THRE_IEN_Msk | UART_IER_TOUT_IEN_Msk));
-    while(g_bWait);
-
-    /* Disable Interrupt */
-    UART_DisableInt(UART0, (UART_IER_RDA_IEN_Msk | UART_IER_THRE_IEN_Msk | UART_IER_TOUT_IEN_Msk));
-    g_bWait = TRUE;
-    printf("\nUART Sample Demo End.\n");
-
-}
-
-void ParseCommand(char *command)
-{
-    if (strcmp(command, "red on") == 0)
-    {
-        PA14 = 0; 
-    }
-    else if (strcmp(command, "red off") == 0)
-    {
-        PA14 = 1; 
-    }
-    else if (strcmp(command, "green on") == 0)
-    {
-        PA13 = 0; 
-    }
-    else if (strcmp(command, "green off") == 0)
-    {
-        PA13 = 1; 
-    }
-    else if (strcmp(command, "blue on") == 0)
-    {
-        PA12 = 0; 
-    }
-    else if (strcmp(command, "blue off") == 0)
-    {
-        PA12 = 1; 
-    }
-    else
-    {
-        printf("Unknown command: %s\n", command);
-    }
 }
 
