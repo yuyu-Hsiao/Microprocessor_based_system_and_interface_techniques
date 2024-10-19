@@ -22006,6 +22006,7 @@ volatile uint32_t g_u32comRtail  = 0;
 
 volatile int32_t g_bEnter        = 0;
 volatile int32_t sendComplete    = 0;
+volatile int32_t out_range_f     = 0;
 
 
 char cmdBuffer[64];
@@ -22060,38 +22061,23 @@ void SYS_Init(void)
 }
 
 void UART0_Init()
-{
-     
-     
-     
-     
-    SYS_ResetModule(((0x4<<24) | 16 ));
-
-     
-    UART_Open(((UART_T *) ((( uint32_t)0x40000000) + 0x50000)), 9600);
+{   
+    SYS_ResetModule(((0x4<<24) | 16 ));		 
+    UART_Open(((UART_T *) ((( uint32_t)0x40000000) + 0x50000)), 9600);				 
 }
 
- 
- 
- 
- 
- 
-
- 
- 
- 
 
 
 void GPIO_Init(void)
 {
-    GPIO_SetMode(((GPIO_T *) (((( uint32_t)0x50000000) + 0x4000) )), 0x00001000, 0x1UL);
-    GPIO_SetMode(((GPIO_T *) (((( uint32_t)0x50000000) + 0x4000) )), 0x00002000, 0x1UL);
-    GPIO_SetMode(((GPIO_T *) (((( uint32_t)0x50000000) + 0x4000) )), 0x00004000, 0x1UL);
+    GPIO_SetMode(((GPIO_T *) (((( uint32_t)0x50000000) + 0x4000) )), (0x00001000|0x00002000|0x00004000), 0x1UL);
 
     (*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(0))) + ((12)<<2)))) = 1;
     (*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(0))) + ((13)<<2)))) = 1;
     (*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(0))) + ((14)<<2)))) = 1;
-
+	
+		GPIO_SetMode(((GPIO_T *) (((( uint32_t)0x50000000) + 0x4000) + 0x0080)), 0x00004000, 0x1UL);
+		(*((volatile uint32_t *)(((((( uint32_t)0x50000000) + 0x4000) + 0x0200)+(0x40*(2))) + ((14)<<2)))) = 1;
 }
 
 void ParseCommand(char *command)
@@ -22157,11 +22143,15 @@ int main(void)
     UART_FunctionTest();
 
     while(1){
-        if(sendComplete)
-        {
-            printf("\nInput:\n");
+        if(sendComplete){
+            printf("\nInput:");
             sendComplete = 0; 
         }
+				if(out_range_f){
+						printf("\nCommand too long!\n");
+            printf("\nInput:\n");				
+						out_range_f = 0;
+				}
 		}
 
 }
@@ -22186,23 +22176,14 @@ void UART_TEST_HANDLE()
 
     if(u32IntSts & (1ul << 8))
     {
+				
          
         while((((((UART_T *) ((( uint32_t)0x40000000) + 0x50000)))->ISR & (1ul << 0))>>0))
         {
              
             u8InChar = ((((UART_T *) ((( uint32_t)0x40000000) + 0x50000)))->RBR);
 
-             
-            if(g_u32comRbytes < 1024)
-            {
-                 
-                g_u8RecData[g_u32comRtail] = u8InChar;
-                g_u32comRtail = (g_u32comRtail == (1024 - 1)) ? 0 : (g_u32comRtail + 1);
-                g_u32comRbytes++;
-            }
-						
-												
-						
+					
             if(u8InChar == 0x0D)
             {
 								g_bEnter = 1;
@@ -22220,18 +22201,28 @@ void UART_TEST_HANDLE()
                 else
                 {
                     cmdIndex = 0;
-                    printf("\nCommand too long!\n");
-                    printf("\nInput:");
+										out_range_f = 1;
                 }
+            }							
+					
+             
+            if(g_u32comRbytes < 1024)
+            {
+                 
+                g_u8RecData[g_u32comRtail] = u8InChar;
+                g_u32comRtail = (g_u32comRtail == (1024 - 1)) ? 0 : (g_u32comRtail + 1);
+                g_u32comRbytes++;
             }
 						
-					
+												
 						
+		
         }
     }
 		
     if(u32IntSts & (1ul << 9))
     {
+			
 			if(g_bEnter){
 					uint16_t tmp;
 					tmp = g_u32comRtail;
@@ -22242,18 +22233,20 @@ void UART_TEST_HANDLE()
 							g_u32comRhead = (g_u32comRhead == (1024 - 1)) ? 0 : (g_u32comRhead + 1);
 							g_u32comRbytes--;
 					}
-					if(g_u32comRhead == tmp)
+					else
 					{
+							sendComplete = 1;
+							g_bEnter = 0;
 							
-							g_bEnter = 0;							
 							
+							
+							
+							
+							
+						
 					}
 			}
-			else{
-				sendComplete = 1;
-			}
-    }
-					
+    }		
 }
 
  
@@ -22263,9 +22256,11 @@ void UART_FunctionTest()
 {
     printf("LAB2-UART");
 		printf("\nInput:");
-
+	
      
 		 
     UART_EnableInt(((UART_T *) ((( uint32_t)0x40000000) + 0x50000)), ((1ul << 0) | (1ul << 1) | (1ul << 4)));
+		
+		 
 }
 

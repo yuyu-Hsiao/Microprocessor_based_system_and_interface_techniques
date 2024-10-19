@@ -36,6 +36,7 @@ volatile uint32_t g_u32comRtail  = 0;
 
 volatile int32_t g_bEnter        = FALSE;
 volatile int32_t sendComplete    = FALSE;
+volatile int32_t out_range_f     = FALSE;
 
 
 char cmdBuffer[CMD_BUFSIZE];
@@ -90,38 +91,23 @@ void SYS_Init(void)
 }
 
 void UART0_Init()
-{
-    /*---------------------------------------------------------------------------------------------------------*/
-    /* Init UART                                                                                               */
-    /*---------------------------------------------------------------------------------------------------------*/
-    /* Reset UART0 */
-    SYS_ResetModule(UART0_RST);
-
-    /* Configure UART0 and set UART0 Baudrate */
-    UART_Open(UART0, 9600);
+{   
+    SYS_ResetModule(UART0_RST);		/* Reset UART0 */
+    UART_Open(UART0, 9600);				/* Configure UART0 and set UART0 Baudrate */
 }
 
-/*---------------------------------------------------------------------------------------------------------*/
-/* UART Test Sample                                                                                        */
-/* Test Item                                                                                               */
-/* It sends the received data to HyperTerminal.                                                            */
-/*---------------------------------------------------------------------------------------------------------*/
-
-/*---------------------------------------------------------------------------------------------------------*/
-/* MAIN function                                                                                           */
-/*---------------------------------------------------------------------------------------------------------*/
 
 
 void GPIO_Init(void)
 {
-    GPIO_SetMode(PA, BIT12, GPIO_PMD_OUTPUT);
-    GPIO_SetMode(PA, BIT13, GPIO_PMD_OUTPUT);
-    GPIO_SetMode(PA, BIT14, GPIO_PMD_OUTPUT);
+    GPIO_SetMode(PA, (BIT12|BIT13|BIT14), GPIO_PMD_OUTPUT);
 
     PA12 = 1;
     PA13 = 1;
     PA14 = 1;
-
+	
+		GPIO_SetMode(PC, BIT14, GPIO_PMD_OUTPUT);
+		PC14 = 1;
 }
 
 void ParseCommand(char *command)
@@ -187,11 +173,15 @@ int main(void)
     UART_FunctionTest();
 
     while(1){
-        if(sendComplete)
-        {
-            printf("\nInput:\n");
+        if(sendComplete){
+            printf("\nInput:");
             sendComplete = FALSE; 
         }
+				if(out_range_f){
+						printf("\nCommand too long!\n");
+            printf("\nInput:\n");				
+						out_range_f = FALSE;
+				}
 		}
 
 }
@@ -216,23 +206,14 @@ void UART_TEST_HANDLE()
 
     if(u32IntSts & UART_ISR_RDA_INT_Msk)
     {
+				//PC14 = !PC14;
         /* Get all the input characters */
         while(UART_IS_RX_READY(UART0))
         {
             /* Get the character + */
             u8InChar = UART_READ(UART0);
 
-            /* Check if buffer full */
-            if(g_u32comRbytes < RXBUFSIZE)
-            {
-                /* Enqueue the character */
-                g_u8RecData[g_u32comRtail] = u8InChar;
-                g_u32comRtail = (g_u32comRtail == (RXBUFSIZE - 1)) ? 0 : (g_u32comRtail + 1);
-                g_u32comRbytes++;
-            }
-						
-												
-						
+					
             if(u8InChar == 0x0D)
             {
 								g_bEnter = TRUE;
@@ -250,18 +231,25 @@ void UART_TEST_HANDLE()
                 else
                 {
                     cmdIndex = 0;
-                    printf("\nCommand too long!\n");
-                    printf("\nInput:");
+										out_range_f = TRUE;
                 }
-            }
-						
+            }							
 					
-						
+            /* Check if buffer full */
+            if(g_u32comRbytes < RXBUFSIZE)
+            {
+                /* Enqueue the character */
+                g_u8RecData[g_u32comRtail] = u8InChar;
+                g_u32comRtail = (g_u32comRtail == (RXBUFSIZE - 1)) ? 0 : (g_u32comRtail + 1);
+                g_u32comRbytes++;
+            }
+								
         }
     }
-		
+		//printf("111");
     if(u32IntSts & UART_ISR_THRE_INT_Msk)
     {
+			
 			if(g_bEnter){
 					uint16_t tmp;
 					tmp = g_u32comRtail;
@@ -272,18 +260,20 @@ void UART_TEST_HANDLE()
 							g_u32comRhead = (g_u32comRhead == (RXBUFSIZE - 1)) ? 0 : (g_u32comRhead + 1);
 							g_u32comRbytes--;
 					}
-					if(g_u32comRhead == tmp)
+					else
 					{
-							
-							g_bEnter = FALSE;							
+							sendComplete = TRUE;
+							g_bEnter = FALSE;
 							//printf("\nInput:");
+							//UART_DisableInt(UART0, UART_IER_THRE_IEN_Msk);
+							//UART_EnableInt(UART0, UART_IER_THRE_IEN_Msk);
+							
+							
+							
+						
 					}
 			}
-			else{
-				sendComplete = TRUE;
-			}
-    }
-					
+    }		
 }
 
 /*---------------------------------------------------------------------------------------------------------*/
@@ -293,9 +283,11 @@ void UART_FunctionTest()
 {
     printf("LAB2-UART");
 		printf("\nInput:");
-
+	
     /* Enable Interrupt and install the call back function */
 		/*--RDA THRE TIME_OUT enable--*/
     UART_EnableInt(UART0, (UART_IER_RDA_IEN_Msk | UART_IER_THRE_IEN_Msk | UART_IER_TOUT_IEN_Msk));
+		//PC14 = !PC14;
+		/*--RDA THRE TIME_OUT enable--*/
 }
 
