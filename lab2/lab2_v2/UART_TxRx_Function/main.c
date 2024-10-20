@@ -16,6 +16,7 @@
  //UA_ISR page.367
  
 #include <stdio.h>
+#include <string.h>
 #include "NUC100Series.h"
 
 
@@ -266,11 +267,7 @@ void UART_TEST_HANDLE()
 							g_bEnter = FALSE;
 							//printf("\nInput:");
 							//UART_DisableInt(UART0, UART_IER_THRE_IEN_Msk);
-							//UART_EnableInt(UART0, UART_IER_THRE_IEN_Msk);
-							
-							
-							
-						
+							//UART_EnableInt(UART0, UART_IER_THRE_IEN_Msk);						
 					}
 			}
     }		
