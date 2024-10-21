@@ -92,12 +92,9 @@ void UART0_Init()
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init UART                                                                                               */
     /*---------------------------------------------------------------------------------------------------------*/
-    /* Reset UART0 */
-    SYS_ResetModule(UART0_RST);
-
-    /* Configure UART0 and set UART0 Baudrate */
-    UART_Open(UART0, 9600);
-	
+    
+    SYS_ResetModule(UART0_RST);	/* Reset UART0 */   
+    UART_Open(UART0, 9600);			/* Configure UART0 and set UART0 Baudrate */	
 		UART_EnableInt(UART0, (UART_IER_RDA_IEN_Msk | UART_IER_THRE_IEN_Msk | UART_IER_TOUT_IEN_Msk));
 }
 
@@ -114,10 +111,7 @@ void UART0_Init()
 
 void GPIO_Init(void)
 {
-    GPIO_SetMode(PA, BIT12, GPIO_PMD_OUTPUT);
-    GPIO_SetMode(PA, BIT13, GPIO_PMD_OUTPUT);
-    GPIO_SetMode(PA, BIT14, GPIO_PMD_OUTPUT);
-
+		GPIO_SetMode(PA, (BIT12|BIT13|BIT14), GPIO_PMD_OUTPUT);
     PA12 = 1;
     PA13 = 1;
     PA14 = 1;
