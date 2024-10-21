@@ -34,11 +34,10 @@ volatile uint32_t g_u32comRbytes = 0;
 volatile uint32_t g_u32comRhead  = 0;
 volatile uint32_t g_u32comRtail  = 0;
 
-volatile int32_t g_bEnter        = FALSE;
-
-
 char cmdBuffer[CMD_BUFSIZE];
 uint32_t cmdIndex = 0;
+
+volatile int32_t g_bEnter        = FALSE;
 
 /*---------------------------------------------------------------------------------------------------------*/
 /* Define functions prototype                                                                              */
