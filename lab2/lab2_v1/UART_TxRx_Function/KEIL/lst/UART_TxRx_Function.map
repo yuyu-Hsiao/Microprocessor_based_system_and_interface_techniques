@@ -20,7 +20,6 @@ Section Cross References
     startup_nuc100series.o(.text) refers to entry.o(.ARM.Collect$$$$00000000) for __main
     main.o(i.GPIO_Init) refers to gpio.o(i.GPIO_SetMode) for GPIO_SetMode
     main.o(i.ParseCommand) refers to strcmp.o(.text) for strcmp
-    main.o(i.ParseCommand) refers to printf5.o(i.__0printf$5) for __2printf
     main.o(i.SYS_Init) refers to clk.o(i.CLK_EnableXtalRC) for CLK_EnableXtalRC
     main.o(i.SYS_Init) refers to clk.o(i.CLK_WaitClockReady) for CLK_WaitClockReady
     main.o(i.SYS_Init) refers to clk.o(i.CLK_SetHCLK) for CLK_SetHCLK
@@ -30,10 +29,6 @@ Section Cross References
     main.o(i.UART02_IRQHandler) refers to main.o(i.UART_TEST_HANDLE) for UART_TEST_HANDLE
     main.o(i.UART0_Init) refers to sys.o(i.SYS_ResetModule) for SYS_ResetModule
     main.o(i.UART0_Init) refers to uart.o(i.UART_Open) for UART_Open
-    main.o(i.UART_FunctionTest) refers to printf5.o(i.__0printf$5) for __2printf
-    main.o(i.UART_FunctionTest) refers to uart.o(i.UART_EnableInt) for UART_EnableInt
-    main.o(i.UART_FunctionTest) refers to uart.o(i.UART_DisableInt) for UART_DisableInt
-    main.o(i.UART_FunctionTest) refers to main.o(.data) for .data
     main.o(i.UART_TEST_HANDLE) refers to main.o(i.ParseCommand) for ParseCommand
     main.o(i.UART_TEST_HANDLE) refers to printf5.o(i.__0printf$5) for __2printf
     main.o(i.UART_TEST_HANDLE) refers to main.o(.bss) for .bss
@@ -42,7 +37,7 @@ Section Cross References
     main.o(i.main) refers to main.o(i.UART0_Init) for UART0_Init
     main.o(i.main) refers to main.o(i.GPIO_Init) for GPIO_Init
     main.o(i.main) refers to printf5.o(i.__0printf$5) for __2printf
-    main.o(i.main) refers to main.o(i.UART_FunctionTest) for UART_FunctionTest
+    main.o(i.main) refers to uart.o(i.UART_EnableInt) for UART_EnableInt
     main.o(i.main) refers to system_nuc100series.o(.data) for SystemCoreClock
     clk.o(i.CLK_DisableCKO) refers to clk.o(i.CLK_DisableModuleClock) for CLK_DisableModuleClock
     clk.o(i.CLK_DisableModuleClock) refers to clk.o(.constdata) for .constdata
@@ -394,6 +389,7 @@ Removing Unused input sections from the image.
     Removing uart.o(i.UART_ClearIntFlag), (56 bytes).
     Removing uart.o(i.UART_Close), (6 bytes).
     Removing uart.o(i.UART_DisableFlowCtrl), (12 bytes).
+    Removing uart.o(i.UART_DisableInt), (48 bytes).
     Removing uart.o(i.UART_EnableFlowCtrl), (30 bytes).
     Removing uart.o(i.UART_Read), (44 bytes).
     Removing uart.o(i.UART_SelectIrDAMode), (132 bytes).
@@ -414,7 +410,7 @@ Removing Unused input sections from the image.
     Removing depilogue.o(.text), (190 bytes).
     Removing depilogue.o(i.__ARM_clz), (46 bytes).
 
-65 unused section(s) (total 2324 bytes) removed from the image.
+66 unused section(s) (total 2372 bytes) removed from the image.
 
 ==============================================================================
 
@@ -425,35 +421,35 @@ Image Symbol Table
     Symbol Name                              Value     Ov Type        Size  Object(Section)
 
     RESET                                    0x00000000   Section      192  startup_nuc100series.o(RESET)
-    ../clib/microlib/division.c              0x00000000   Number         0  uidiv.o ABSOLUTE
     ../clib/microlib/division.c              0x00000000   Number         0  uldiv.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry11b.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry9b.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry10a.o ABSOLUTE
+    ../clib/microlib/division.c              0x00000000   Number         0  uidiv.o ABSOLUTE
     ../clib/microlib/init/entry.s            0x00000000   Number         0  entry10b.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry11a.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry8b.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry2.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry5.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry7a.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry7b.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry8a.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry10a.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry9b.o ABSOLUTE
     ../clib/microlib/init/entry.s            0x00000000   Number         0  entry9a.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry8b.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry8a.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry7b.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry7a.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry5.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry2.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry11b.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry11a.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry.o ABSOLUTE
     ../clib/microlib/longlong.c              0x00000000   Number         0  llsshr.o ABSOLUTE
     ../clib/microlib/longlong.c              0x00000000   Number         0  llushr.o ABSOLUTE
     ../clib/microlib/longlong.c              0x00000000   Number         0  llshl.o ABSOLUTE
-    ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf5.o ABSOLUTE
+    ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf8.o ABSOLUTE
+    ../clib/microlib/printf/printf.c         0x00000000   Number         0  printfa.o ABSOLUTE
     ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf2.o ABSOLUTE
     ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf1.o ABSOLUTE
-    ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf0.o ABSOLUTE
     ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf4.o ABSOLUTE
-    ../clib/microlib/printf/printf.c         0x00000000   Number         0  printfb.o ABSOLUTE
-    ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf3.o ABSOLUTE
-    ../clib/microlib/printf/printf.c         0x00000000   Number         0  printfa.o ABSOLUTE
-    ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf8.o ABSOLUTE
+    ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf0.o ABSOLUTE
     ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf6.o ABSOLUTE
+    ../clib/microlib/printf/printf.c         0x00000000   Number         0  printfb.o ABSOLUTE
     ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf7.o ABSOLUTE
+    ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf3.o ABSOLUTE
+    ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf5.o ABSOLUTE
     ../clib/microlib/printf/stubs.s          0x00000000   Number         0  stubs.o ABSOLUTE
     ../clib/microlib/string/strcmp.c         0x00000000   Number         0  strcmp.o ABSOLUTE
     ../clib/microlib/stubs.s                 0x00000000   Number         0  iusefp.o ABSOLUTE
@@ -509,38 +505,36 @@ Image Symbol Table
     i.CLK_SetModuleClock                     0x0000053c   Section        0  clk.o(i.CLK_SetModuleClock)
     i.CLK_WaitClockReady                     0x00000608   Section        0  clk.o(i.CLK_WaitClockReady)
     i.GPIO_Init                              0x00000634   Section        0  main.o(i.GPIO_Init)
-    i.GPIO_SetMode                           0x0000066c   Section        0  gpio.o(i.GPIO_SetMode)
-    i.Hard_Fault_Handler                     0x00000694   Section        0  retarget.o(i.Hard_Fault_Handler)
-    __tagsym$$used                           0x00000695   Number         0  retarget.o(i.Hard_Fault_Handler)
-    i.ParseCommand                           0x000006bc   Section        0  main.o(i.ParseCommand)
-    i.SYS_Init                               0x00000788   Section        0  main.o(i.SYS_Init)
-    i.SYS_ResetModule                        0x000007e0   Section        0  sys.o(i.SYS_ResetModule)
-    i.SendChar_ToUART                        0x000007fc   Section        0  retarget.o(i.SendChar_ToUART)
-    i.SystemCoreClockUpdate                  0x0000081c   Section        0  system_nuc100series.o(i.SystemCoreClockUpdate)
-    i.SystemInit                             0x000008ac   Section        0  system_nuc100series.o(i.SystemInit)
-    i.UART02_IRQHandler                      0x000008ae   Section        0  main.o(i.UART02_IRQHandler)
-    i.UART0_Init                             0x000008b8   Section        0  main.o(i.UART0_Init)
-    i.UART_DisableInt                        0x000008d4   Section        0  uart.o(i.UART_DisableInt)
-    i.UART_EnableInt                         0x00000904   Section        0  uart.o(i.UART_EnableInt)
-    i.UART_FunctionTest                      0x00000934   Section        0  main.o(i.UART_FunctionTest)
-    i.UART_Open                              0x0000099c   Section        0  uart.o(i.UART_Open)
-    i.UART_TEST_HANDLE                       0x00000a24   Section        0  main.o(i.UART_TEST_HANDLE)
-    i.__0printf$5                            0x00000b20   Section        0  printf5.o(i.__0printf$5)
-    i.__scatterload_copy                     0x00000b40   Section       14  handlers.o(i.__scatterload_copy)
-    i.__scatterload_null                     0x00000b4e   Section        2  handlers.o(i.__scatterload_null)
-    i.__scatterload_zeroinit                 0x00000b50   Section       14  handlers.o(i.__scatterload_zeroinit)
-    i._printf_core                           0x00000b60   Section        0  printf5.o(i._printf_core)
-    _printf_core                             0x00000b61   Thumb Code   688  printf5.o(i._printf_core)
-    i.fputc                                  0x00000e3c   Section        0  retarget.o(i.fputc)
-    i.main                                   0x00000e48   Section        0  main.o(i.main)
-    i.stackDump                              0x00000eb4   Section        0  retarget.o(i.stackDump)
-    stackDump                                0x00000eb5   Thumb Code    70  retarget.o(i.stackDump)
-    .constdata                               0x00000f5c   Section       56  clk.o(.constdata)
-    .constdata                               0x00000f94   Section       48  uart.o(.constdata)
+    i.GPIO_SetMode                           0x00000658   Section        0  gpio.o(i.GPIO_SetMode)
+    i.Hard_Fault_Handler                     0x00000680   Section        0  retarget.o(i.Hard_Fault_Handler)
+    __tagsym$$used                           0x00000681   Number         0  retarget.o(i.Hard_Fault_Handler)
+    i.ParseCommand                           0x000006a8   Section        0  main.o(i.ParseCommand)
+    i.SYS_Init                               0x00000750   Section        0  main.o(i.SYS_Init)
+    i.SYS_ResetModule                        0x000007a8   Section        0  sys.o(i.SYS_ResetModule)
+    i.SendChar_ToUART                        0x000007c4   Section        0  retarget.o(i.SendChar_ToUART)
+    i.SystemCoreClockUpdate                  0x000007e4   Section        0  system_nuc100series.o(i.SystemCoreClockUpdate)
+    i.SystemInit                             0x00000874   Section        0  system_nuc100series.o(i.SystemInit)
+    i.UART02_IRQHandler                      0x00000876   Section        0  main.o(i.UART02_IRQHandler)
+    i.UART0_Init                             0x00000880   Section        0  main.o(i.UART0_Init)
+    i.UART_EnableInt                         0x0000089c   Section        0  uart.o(i.UART_EnableInt)
+    i.UART_Open                              0x000008cc   Section        0  uart.o(i.UART_Open)
+    i.UART_TEST_HANDLE                       0x00000954   Section        0  main.o(i.UART_TEST_HANDLE)
+    i.__0printf$5                            0x00000a40   Section        0  printf5.o(i.__0printf$5)
+    i.__scatterload_copy                     0x00000a60   Section       14  handlers.o(i.__scatterload_copy)
+    i.__scatterload_null                     0x00000a6e   Section        2  handlers.o(i.__scatterload_null)
+    i.__scatterload_zeroinit                 0x00000a70   Section       14  handlers.o(i.__scatterload_zeroinit)
+    i._printf_core                           0x00000a80   Section        0  printf5.o(i._printf_core)
+    _printf_core                             0x00000a81   Thumb Code   688  printf5.o(i._printf_core)
+    i.fputc                                  0x00000d5c   Section        0  retarget.o(i.fputc)
+    i.main                                   0x00000d68   Section        0  main.o(i.main)
+    i.stackDump                              0x00000de0   Section        0  retarget.o(i.stackDump)
+    stackDump                                0x00000de1   Thumb Code    70  retarget.o(i.stackDump)
+    .constdata                               0x00000e88   Section       56  clk.o(.constdata)
+    .constdata                               0x00000ec0   Section       48  uart.o(.constdata)
     .data                                    0x20000000   Section       44  system_nuc100series.o(.data)
-    .data                                    0x2000002c   Section       24  main.o(.data)
-    .data                                    0x20000044   Section        4  retarget.o(.data)
-    .bss                                     0x20000048   Section     1088  main.o(.bss)
+    .data                                    0x2000002c   Section       20  main.o(.data)
+    .data                                    0x20000040   Section        4  retarget.o(.data)
+    .bss                                     0x20000044   Section     1088  main.o(.bss)
     STACK                                    0x20000488   Section     1024  startup_nuc100series.o(STACK)
 
     Global Symbols
@@ -658,32 +652,30 @@ Image Symbol Table
     CLK_SetHCLK                              0x000004f5   Thumb Code    66  clk.o(i.CLK_SetHCLK)
     CLK_SetModuleClock                       0x0000053d   Thumb Code   180  clk.o(i.CLK_SetModuleClock)
     CLK_WaitClockReady                       0x00000609   Thumb Code    34  clk.o(i.CLK_WaitClockReady)
-    GPIO_Init                                0x00000635   Thumb Code    46  main.o(i.GPIO_Init)
-    GPIO_SetMode                             0x0000066d   Thumb Code    40  gpio.o(i.GPIO_SetMode)
-    Hard_Fault_Handler                       0x00000695   Thumb Code    16  retarget.o(i.Hard_Fault_Handler)
-    ParseCommand                             0x000006bd   Thumb Code   114  main.o(i.ParseCommand)
-    SYS_Init                                 0x00000789   Thumb Code    80  main.o(i.SYS_Init)
-    SYS_ResetModule                          0x000007e1   Thumb Code    26  sys.o(i.SYS_ResetModule)
-    SendChar_ToUART                          0x000007fd   Thumb Code    26  retarget.o(i.SendChar_ToUART)
-    SystemCoreClockUpdate                    0x0000081d   Thumb Code   118  system_nuc100series.o(i.SystemCoreClockUpdate)
-    SystemInit                               0x000008ad   Thumb Code     2  system_nuc100series.o(i.SystemInit)
-    UART02_IRQHandler                        0x000008af   Thumb Code     8  main.o(i.UART02_IRQHandler)
-    UART0_Init                               0x000008b9   Thumb Code    20  main.o(i.UART0_Init)
-    UART_DisableInt                          0x000008d5   Thumb Code    36  uart.o(i.UART_DisableInt)
-    UART_EnableInt                           0x00000905   Thumb Code    36  uart.o(i.UART_EnableInt)
-    UART_FunctionTest                        0x00000935   Thumb Code    52  main.o(i.UART_FunctionTest)
-    UART_Open                                0x0000099d   Thumb Code   120  uart.o(i.UART_Open)
-    UART_TEST_HANDLE                         0x00000a25   Thumb Code   204  main.o(i.UART_TEST_HANDLE)
-    __0printf$5                              0x00000b21   Thumb Code    24  printf5.o(i.__0printf$5)
-    __1printf$5                              0x00000b21   Thumb Code     0  printf5.o(i.__0printf$5)
-    __2printf                                0x00000b21   Thumb Code     0  printf5.o(i.__0printf$5)
-    __scatterload_copy                       0x00000b41   Thumb Code    14  handlers.o(i.__scatterload_copy)
-    __scatterload_null                       0x00000b4f   Thumb Code     2  handlers.o(i.__scatterload_null)
-    __scatterload_zeroinit                   0x00000b51   Thumb Code    14  handlers.o(i.__scatterload_zeroinit)
-    fputc                                    0x00000e3d   Thumb Code    12  retarget.o(i.fputc)
-    main                                     0x00000e49   Thumb Code    60  main.o(i.main)
-    Region$$Table$$Base                      0x00000fc4   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x00000fe4   Number         0  anon$$obj.o(Region$$Table)
+    GPIO_Init                                0x00000635   Thumb Code    26  main.o(i.GPIO_Init)
+    GPIO_SetMode                             0x00000659   Thumb Code    40  gpio.o(i.GPIO_SetMode)
+    Hard_Fault_Handler                       0x00000681   Thumb Code    16  retarget.o(i.Hard_Fault_Handler)
+    ParseCommand                             0x000006a9   Thumb Code   104  main.o(i.ParseCommand)
+    SYS_Init                                 0x00000751   Thumb Code    80  main.o(i.SYS_Init)
+    SYS_ResetModule                          0x000007a9   Thumb Code    26  sys.o(i.SYS_ResetModule)
+    SendChar_ToUART                          0x000007c5   Thumb Code    26  retarget.o(i.SendChar_ToUART)
+    SystemCoreClockUpdate                    0x000007e5   Thumb Code   118  system_nuc100series.o(i.SystemCoreClockUpdate)
+    SystemInit                               0x00000875   Thumb Code     2  system_nuc100series.o(i.SystemInit)
+    UART02_IRQHandler                        0x00000877   Thumb Code     8  main.o(i.UART02_IRQHandler)
+    UART0_Init                               0x00000881   Thumb Code    20  main.o(i.UART0_Init)
+    UART_EnableInt                           0x0000089d   Thumb Code    36  uart.o(i.UART_EnableInt)
+    UART_Open                                0x000008cd   Thumb Code   120  uart.o(i.UART_Open)
+    UART_TEST_HANDLE                         0x00000955   Thumb Code   188  main.o(i.UART_TEST_HANDLE)
+    __0printf$5                              0x00000a41   Thumb Code    24  printf5.o(i.__0printf$5)
+    __1printf$5                              0x00000a41   Thumb Code     0  printf5.o(i.__0printf$5)
+    __2printf                                0x00000a41   Thumb Code     0  printf5.o(i.__0printf$5)
+    __scatterload_copy                       0x00000a61   Thumb Code    14  handlers.o(i.__scatterload_copy)
+    __scatterload_null                       0x00000a6f   Thumb Code     2  handlers.o(i.__scatterload_null)
+    __scatterload_zeroinit                   0x00000a71   Thumb Code    14  handlers.o(i.__scatterload_zeroinit)
+    fputc                                    0x00000d5d   Thumb Code    12  retarget.o(i.fputc)
+    main                                     0x00000d69   Thumb Code    70  main.o(i.main)
+    Region$$Table$$Base                      0x00000ef0   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x00000f10   Number         0  anon$$obj.o(Region$$Table)
     SystemCoreClock                          0x20000000   Data           4  system_nuc100series.o(.data)
     CyclesPerUs                              0x20000004   Data           4  system_nuc100series.o(.data)
     PllClock                                 0x20000008   Data           4  system_nuc100series.o(.data)
@@ -691,12 +683,11 @@ Image Symbol Table
     g_u32comRbytes                           0x2000002c   Data           4  main.o(.data)
     g_u32comRhead                            0x20000030   Data           4  main.o(.data)
     g_u32comRtail                            0x20000034   Data           4  main.o(.data)
-    g_bWait                                  0x20000038   Data           4  main.o(.data)
+    cmdIndex                                 0x20000038   Data           4  main.o(.data)
     g_bEnter                                 0x2000003c   Data           4  main.o(.data)
-    cmdIndex                                 0x20000040   Data           4  main.o(.data)
-    __stdout                                 0x20000044   Data           4  retarget.o(.data)
-    g_u8RecData                              0x20000048   Data        1024  main.o(.bss)
-    cmdBuffer                                0x20000448   Data          64  main.o(.bss)
+    __stdout                                 0x20000040   Data           4  retarget.o(.data)
+    g_u8RecData                              0x20000044   Data        1024  main.o(.bss)
+    cmdBuffer                                0x20000444   Data          64  main.o(.bss)
     __initial_sp                             0x20000888   Data           0  startup_nuc100series.o(STACK)
 
 
@@ -707,85 +698,84 @@ Memory Map of the image
 
   Image Entry point : 0x000000f1
 
-  Load Region LR_1 (Base: 0x00000000, Size: 0x0000102c, Max: 0xffffffff, ABSOLUTE)
+  Load Region LR_1 (Base: 0x00000000, Size: 0x00000f54, Max: 0xffffffff, ABSOLUTE)
 
-    Execution Region ER_RO (Exec base: 0x00000000, Load base: 0x00000000, Size: 0x00000fe4, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RO (Exec base: 0x00000000, Load base: 0x00000000, Size: 0x00000f10, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
     0x00000000   0x00000000   0x000000c0   Data   RO          114    RESET               startup_nuc100series.o
-    0x000000c0   0x000000c0   0x00000000   Code   RO          657  * .ARM.Collect$$$$00000000  mc_p.l(entry.o)
-    0x000000c0   0x000000c0   0x00000004   Code   RO          923    .ARM.Collect$$$$00000001  mc_p.l(entry2.o)
-    0x000000c4   0x000000c4   0x00000004   Code   RO          926    .ARM.Collect$$$$00000004  mc_p.l(entry5.o)
-    0x000000c8   0x000000c8   0x00000000   Code   RO          928    .ARM.Collect$$$$00000008  mc_p.l(entry7b.o)
-    0x000000c8   0x000000c8   0x00000000   Code   RO          930    .ARM.Collect$$$$0000000A  mc_p.l(entry8b.o)
-    0x000000c8   0x000000c8   0x00000008   Code   RO          931    .ARM.Collect$$$$0000000B  mc_p.l(entry9a.o)
-    0x000000d0   0x000000d0   0x00000000   Code   RO          933    .ARM.Collect$$$$0000000D  mc_p.l(entry10a.o)
-    0x000000d0   0x000000d0   0x00000000   Code   RO          935    .ARM.Collect$$$$0000000F  mc_p.l(entry11a.o)
-    0x000000d0   0x000000d0   0x00000004   Code   RO          924    .ARM.Collect$$$$00002712  mc_p.l(entry2.o)
-    0x000000d4   0x000000d4   0x0000001c   Code   RO          354    .emb_text           retarget.o
+    0x000000c0   0x000000c0   0x00000000   Code   RO          653  * .ARM.Collect$$$$00000000  mc_p.l(entry.o)
+    0x000000c0   0x000000c0   0x00000004   Code   RO          919    .ARM.Collect$$$$00000001  mc_p.l(entry2.o)
+    0x000000c4   0x000000c4   0x00000004   Code   RO          922    .ARM.Collect$$$$00000004  mc_p.l(entry5.o)
+    0x000000c8   0x000000c8   0x00000000   Code   RO          924    .ARM.Collect$$$$00000008  mc_p.l(entry7b.o)
+    0x000000c8   0x000000c8   0x00000000   Code   RO          926    .ARM.Collect$$$$0000000A  mc_p.l(entry8b.o)
+    0x000000c8   0x000000c8   0x00000008   Code   RO          927    .ARM.Collect$$$$0000000B  mc_p.l(entry9a.o)
+    0x000000d0   0x000000d0   0x00000000   Code   RO          929    .ARM.Collect$$$$0000000D  mc_p.l(entry10a.o)
+    0x000000d0   0x000000d0   0x00000000   Code   RO          931    .ARM.Collect$$$$0000000F  mc_p.l(entry11a.o)
+    0x000000d0   0x000000d0   0x00000004   Code   RO          920    .ARM.Collect$$$$00002712  mc_p.l(entry2.o)
+    0x000000d4   0x000000d4   0x0000001c   Code   RO          350    .emb_text           retarget.o
     0x000000f0   0x000000f0   0x0000004c   Code   RO          115  * .text               startup_nuc100series.o
-    0x0000013c   0x0000013c   0x0000002c   Code   RO          658    .text               mc_p.l(uidiv.o)
-    0x00000168   0x00000168   0x0000001c   Code   RO          660    .text               mc_p.l(strcmp.o)
-    0x00000184   0x00000184   0x00000060   Code   RO          937    .text               mc_p.l(uldiv.o)
-    0x000001e4   0x000001e4   0x00000024   Code   RO          950    .text               mc_p.l(init.o)
-    0x00000208   0x00000208   0x00000020   Code   RO          952    .text               mc_p.l(llshl.o)
-    0x00000228   0x00000228   0x00000022   Code   RO          954    .text               mc_p.l(llushr.o)
+    0x0000013c   0x0000013c   0x0000002c   Code   RO          654    .text               mc_p.l(uidiv.o)
+    0x00000168   0x00000168   0x0000001c   Code   RO          656    .text               mc_p.l(strcmp.o)
+    0x00000184   0x00000184   0x00000060   Code   RO          933    .text               mc_p.l(uldiv.o)
+    0x000001e4   0x000001e4   0x00000024   Code   RO          946    .text               mc_p.l(init.o)
+    0x00000208   0x00000208   0x00000020   Code   RO          948    .text               mc_p.l(llshl.o)
+    0x00000228   0x00000228   0x00000022   Code   RO          950    .text               mc_p.l(llushr.o)
     0x0000024a   0x0000024a   0x00000002   PAD
-    0x0000024c   0x0000024c   0x00000030   Code   RO          224    i.CLK_EnableModuleClock  clk.o
-    0x0000027c   0x0000027c   0x00000198   Code   RO          225    i.CLK_EnablePLL     clk.o
-    0x00000414   0x00000414   0x00000010   Code   RO          226    i.CLK_EnableXtalRC  clk.o
-    0x00000424   0x00000424   0x00000058   Code   RO          517    i.CLK_GetPLLClockFreq  uart.o
-    0x0000047c   0x0000047c   0x00000078   Code   RO          234    i.CLK_SetCoreClock  clk.o
-    0x000004f4   0x000004f4   0x00000048   Code   RO          235    i.CLK_SetHCLK       clk.o
-    0x0000053c   0x0000053c   0x000000cc   Code   RO          236    i.CLK_SetModuleClock  clk.o
-    0x00000608   0x00000608   0x0000002c   Code   RO          238    i.CLK_WaitClockReady  clk.o
-    0x00000634   0x00000634   0x00000038   Code   RO          121    i.GPIO_Init         main.o
-    0x0000066c   0x0000066c   0x00000028   Code   RO          629    i.GPIO_SetMode      gpio.o
-    0x00000694   0x00000694   0x00000028   Code   RO          356    i.Hard_Fault_Handler  retarget.o
-    0x000006bc   0x000006bc   0x000000cc   Code   RO          122    i.ParseCommand      main.o
-    0x00000788   0x00000788   0x00000058   Code   RO          123    i.SYS_Init          main.o
-    0x000007e0   0x000007e0   0x0000001a   Code   RO          452    i.SYS_ResetModule   sys.o
-    0x000007fa   0x000007fa   0x00000002   PAD
-    0x000007fc   0x000007fc   0x00000020   Code   RO          359    i.SendChar_ToUART   retarget.o
-    0x0000081c   0x0000081c   0x00000090   Code   RO            3    i.SystemCoreClockUpdate  system_nuc100series.o
-    0x000008ac   0x000008ac   0x00000002   Code   RO            4    i.SystemInit        system_nuc100series.o
-    0x000008ae   0x000008ae   0x00000008   Code   RO          124    i.UART02_IRQHandler  main.o
-    0x000008b6   0x000008b6   0x00000002   PAD
-    0x000008b8   0x000008b8   0x0000001c   Code   RO          125    i.UART0_Init        main.o
-    0x000008d4   0x000008d4   0x00000030   Code   RO          521    i.UART_DisableInt   uart.o
-    0x00000904   0x00000904   0x00000030   Code   RO          523    i.UART_EnableInt    uart.o
-    0x00000934   0x00000934   0x00000068   Code   RO          126    i.UART_FunctionTest  main.o
-    0x0000099c   0x0000099c   0x00000088   Code   RO          524    i.UART_Open         uart.o
-    0x00000a24   0x00000a24   0x000000fc   Code   RO          127    i.UART_TEST_HANDLE  main.o
-    0x00000b20   0x00000b20   0x00000020   Code   RO          795    i.__0printf$5       mc_p.l(printf5.o)
-    0x00000b40   0x00000b40   0x0000000e   Code   RO          964    i.__scatterload_copy  mc_p.l(handlers.o)
-    0x00000b4e   0x00000b4e   0x00000002   Code   RO          965    i.__scatterload_null  mc_p.l(handlers.o)
-    0x00000b50   0x00000b50   0x0000000e   Code   RO          966    i.__scatterload_zeroinit  mc_p.l(handlers.o)
-    0x00000b5e   0x00000b5e   0x00000002   PAD
-    0x00000b60   0x00000b60   0x000002dc   Code   RO          802    i._printf_core      mc_p.l(printf5.o)
-    0x00000e3c   0x00000e3c   0x0000000c   Code   RO          363    i.fputc             retarget.o
-    0x00000e48   0x00000e48   0x0000006c   Code   RO          128    i.main              main.o
-    0x00000eb4   0x00000eb4   0x000000a8   Code   RO          365    i.stackDump         retarget.o
-    0x00000f5c   0x00000f5c   0x00000038   Data   RO          239    .constdata          clk.o
-    0x00000f94   0x00000f94   0x00000030   Data   RO          532    .constdata          uart.o
-    0x00000fc4   0x00000fc4   0x00000020   Data   RO          962    Region$$Table       anon$$obj.o
+    0x0000024c   0x0000024c   0x00000030   Code   RO          220    i.CLK_EnableModuleClock  clk.o
+    0x0000027c   0x0000027c   0x00000198   Code   RO          221    i.CLK_EnablePLL     clk.o
+    0x00000414   0x00000414   0x00000010   Code   RO          222    i.CLK_EnableXtalRC  clk.o
+    0x00000424   0x00000424   0x00000058   Code   RO          513    i.CLK_GetPLLClockFreq  uart.o
+    0x0000047c   0x0000047c   0x00000078   Code   RO          230    i.CLK_SetCoreClock  clk.o
+    0x000004f4   0x000004f4   0x00000048   Code   RO          231    i.CLK_SetHCLK       clk.o
+    0x0000053c   0x0000053c   0x000000cc   Code   RO          232    i.CLK_SetModuleClock  clk.o
+    0x00000608   0x00000608   0x0000002c   Code   RO          234    i.CLK_WaitClockReady  clk.o
+    0x00000634   0x00000634   0x00000024   Code   RO          121    i.GPIO_Init         main.o
+    0x00000658   0x00000658   0x00000028   Code   RO          625    i.GPIO_SetMode      gpio.o
+    0x00000680   0x00000680   0x00000028   Code   RO          352    i.Hard_Fault_Handler  retarget.o
+    0x000006a8   0x000006a8   0x000000a8   Code   RO          122    i.ParseCommand      main.o
+    0x00000750   0x00000750   0x00000058   Code   RO          123    i.SYS_Init          main.o
+    0x000007a8   0x000007a8   0x0000001a   Code   RO          448    i.SYS_ResetModule   sys.o
+    0x000007c2   0x000007c2   0x00000002   PAD
+    0x000007c4   0x000007c4   0x00000020   Code   RO          355    i.SendChar_ToUART   retarget.o
+    0x000007e4   0x000007e4   0x00000090   Code   RO            3    i.SystemCoreClockUpdate  system_nuc100series.o
+    0x00000874   0x00000874   0x00000002   Code   RO            4    i.SystemInit        system_nuc100series.o
+    0x00000876   0x00000876   0x00000008   Code   RO          124    i.UART02_IRQHandler  main.o
+    0x0000087e   0x0000087e   0x00000002   PAD
+    0x00000880   0x00000880   0x0000001c   Code   RO          125    i.UART0_Init        main.o
+    0x0000089c   0x0000089c   0x00000030   Code   RO          519    i.UART_EnableInt    uart.o
+    0x000008cc   0x000008cc   0x00000088   Code   RO          520    i.UART_Open         uart.o
+    0x00000954   0x00000954   0x000000ec   Code   RO          126    i.UART_TEST_HANDLE  main.o
+    0x00000a40   0x00000a40   0x00000020   Code   RO          791    i.__0printf$5       mc_p.l(printf5.o)
+    0x00000a60   0x00000a60   0x0000000e   Code   RO          960    i.__scatterload_copy  mc_p.l(handlers.o)
+    0x00000a6e   0x00000a6e   0x00000002   Code   RO          961    i.__scatterload_null  mc_p.l(handlers.o)
+    0x00000a70   0x00000a70   0x0000000e   Code   RO          962    i.__scatterload_zeroinit  mc_p.l(handlers.o)
+    0x00000a7e   0x00000a7e   0x00000002   PAD
+    0x00000a80   0x00000a80   0x000002dc   Code   RO          798    i._printf_core      mc_p.l(printf5.o)
+    0x00000d5c   0x00000d5c   0x0000000c   Code   RO          359    i.fputc             retarget.o
+    0x00000d68   0x00000d68   0x00000078   Code   RO          127    i.main              main.o
+    0x00000de0   0x00000de0   0x000000a8   Code   RO          361    i.stackDump         retarget.o
+    0x00000e88   0x00000e88   0x00000038   Data   RO          235    .constdata          clk.o
+    0x00000ec0   0x00000ec0   0x00000030   Data   RO          528    .constdata          uart.o
+    0x00000ef0   0x00000ef0   0x00000020   Data   RO          958    Region$$Table       anon$$obj.o
 
 
-    Execution Region ER_RW (Exec base: 0x20000000, Load base: 0x00000fe4, Size: 0x00000048, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RW (Exec base: 0x20000000, Load base: 0x00000f10, Size: 0x00000044, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000000   0x00000fe4   0x0000002c   Data   RW            5    .data               system_nuc100series.o
-    0x2000002c   0x00001010   0x00000018   Data   RW          130    .data               main.o
-    0x20000044   0x00001028   0x00000004   Data   RW          366    .data               retarget.o
+    0x20000000   0x00000f10   0x0000002c   Data   RW            5    .data               system_nuc100series.o
+    0x2000002c   0x00000f3c   0x00000014   Data   RW          129    .data               main.o
+    0x20000040   0x00000f50   0x00000004   Data   RW          362    .data               retarget.o
 
 
-    Execution Region ER_ZI (Exec base: 0x20000048, Load base: 0x0000102c, Size: 0x00000840, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_ZI (Exec base: 0x20000044, Load base: 0x00000f54, Size: 0x00000844, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000048        -       0x00000440   Zero   RW          129    .bss                main.o
+    0x20000044        -       0x00000440   Zero   RW          128    .bss                main.o
+    0x20000484   0x00000f54   0x00000004   PAD
     0x20000488        -       0x00000400   Zero   RW          112    STACK               startup_nuc100series.o
 
 
@@ -796,19 +786,19 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-       912        122         56          0          0       6466   clk.o
+       912        122         56          0          0       6478   clk.o
         40          0          0          0          0       1095   gpio.o
-       848        264          0         24       1088     132374   main.o
-       280        132          0          4          0       4982   retarget.o
+       684        188          0         20       1088     131804   main.o
+       280        132          0          4          0       4986   retarget.o
         76         32        192          0       1024        776   startup_nuc100series.o
         26          0          0          0          0        550   sys.o
-       146         26          0         44          0     118443   system_nuc100series.o
-       320         58         48          0          0       9407   uart.o
+       146         26          0         44          0     118447   system_nuc100series.o
+       272         46         48          0          0       8681   uart.o
 
     ----------------------------------------------------------------------
-      2652        634        328         72       2112     274093   Object Totals
+      2440        546        328         68       2116     272817   Object Totals
          0          0         32          0          0          0   (incl. Generated)
-         4          0          0          0          0          0   (incl. Padding)
+         4          0          0          0          4          0   (incl. Padding)
 
     ----------------------------------------------------------------------
 
@@ -851,15 +841,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      3740        702        328         72       2112     273469   Grand Totals
-      3740        702        328         72       2112     273469   ELF Image Totals
-      3740        702        328         72          0          0   ROM Totals
+      3528        614        328         68       2116     272281   Grand Totals
+      3528        614        328         68       2116     272281   ELF Image Totals
+      3528        614        328         68          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                 4068 (   3.97kB)
+    Total RO  Size (Code + RO Data)                 3856 (   3.77kB)
     Total RW  Size (RW Data + ZI Data)              2184 (   2.13kB)
-    Total ROM Size (Code + RO Data + RW Data)       4140 (   4.04kB)
+    Total ROM Size (Code + RO Data + RW Data)       3924 (   3.83kB)
 
 ==============================================================================
 

@@ -94,7 +94,7 @@ void UART0_Init()
     
     SYS_ResetModule(UART0_RST);	/* Reset UART0 */   
     UART_Open(UART0, 9600);			/* Configure UART0 and set UART0 Baudrate */	
-		UART_EnableInt(UART0, (UART_IER_RDA_IEN_Msk | UART_IER_THRE_IEN_Msk | UART_IER_TOUT_IEN_Msk));
+		
 }
 
 /*---------------------------------------------------------------------------------------------------------*/
@@ -166,13 +166,10 @@ int main(void)
     /*---------------------------------------------------------------------------------------------------------*/
 
     printf("\n\nCPU @ %dHz\n", SystemCoreClock);
-    printf("\n\nUART Sample Program\n");
 	  printf("LAB2-UART");
 		printf("\nInput:");
 		
-		
-
-
+		UART_EnableInt(UART0, (UART_IER_RDA_IEN_Msk | UART_IER_THRE_IEN_Msk | UART_IER_TOUT_IEN_Msk));
     while(1);
 
 }
@@ -212,7 +209,7 @@ void UART_TEST_HANDLE()
                 g_u32comRbytes++;
             }
 						
-            if(u8InChar == '\r' || u8InChar == '\n')
+            if(u8InChar == 0x0D)
             {
 								g_bEnter = TRUE;
                 cmdBuffer[cmdIndex] = '\0';

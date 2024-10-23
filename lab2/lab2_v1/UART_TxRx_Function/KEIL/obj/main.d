@@ -1,5 +1,6 @@
 .\obj\main.o: ..\main.c
 .\obj\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\obj\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 .\obj\main.o: ..\..\Library\Device\Nuvoton\NUC100Series\Include\NUC100Series.h
 .\obj\main.o: ..\..\Library\CMSIS\Include\core_cm0.h
 .\obj\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
