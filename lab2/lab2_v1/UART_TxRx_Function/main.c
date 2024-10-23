@@ -13,6 +13,7 @@
  //UART interrupt Enable register page.356
  //SYS->GPB_MFP page.73
  //UART page.340
+ //UA_IER page.356
  //UA_ISR page.367
  
 #include <stdio.h>
