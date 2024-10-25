@@ -102,11 +102,15 @@ void UART0_Init(){
 
 void ADC_Init(){
 	
-		/* Set the ADC operation mode as single, input mode as single-end and enable the analog input channel 2 */
+		/* Set the ADC operation mode as single*/ 
+		/* input mode as single-end and enable the analog input channel 2 */
 		ADC_Open(ADC, ADC_ADCR_DIFFEN_SINGLE_END, ADC_ADCR_ADMD_SINGLE, 0x1 << 2);
 
 		/* Power on ADC module */
 		ADC_POWER_ON(ADC);
+	
+		/* Clear the A/D interrupt flag for safe */
+		ADC_CLR_INT_FLAG(ADC, ADC_ADF_INT);
 }
 
 void GPIO_Init(void)
@@ -139,7 +143,7 @@ void AdcSingleModeTest()
             previousScaledValue = scaledValue; 
         }
 				counter++;
-			  if(counter==referenceValue){
+			  if(counter>=referenceValue){
 						if(GPIO_counter==11)GPIO_counter=15;
 						PC->DOUT = (PC->DOUT & 0x0FFF)|0xF000;
 						PC->DOUT &= ~(1<<GPIO_counter);
@@ -148,9 +152,6 @@ void AdcSingleModeTest()
 				}
 
 			
-				/* Clear the A/D interrupt flag for safe */
-				ADC_CLR_INT_FLAG(ADC, ADC_ADF_INT);
-
 				/* Enable the ADC interrupt */
 				ADC_EnableInt(ADC, ADC_ADF_INT);
 				NVIC_EnableIRQ(ADC_IRQn);
@@ -172,7 +173,7 @@ void AdcSingleModeTest()
 				printf("Result of channel: %d\n", scaledValue);
 
 				/* Add a delay if necessary to avoid overwhelming the terminal with data */
-				CLK_SysTickDelay(1000);  // 50ms delay for more readable output
+				CLK_SysTickDelay(1000);  // 1ms delay for more readable output
 		}
 
 }
@@ -180,7 +181,7 @@ void AdcSingleModeTest()
 
 
 /*---------------------------------------------------------------------------------------------------------*/
-/* ADC interrupt handler  在ADC轉換完成時被調用                                                                                   */
+/* ADC interrupt handler  在ADC轉換完成時被調用                                                            */
 /*---------------------------------------------------------------------------------------------------------*/
 void ADC_IRQHandler(void)
 {
