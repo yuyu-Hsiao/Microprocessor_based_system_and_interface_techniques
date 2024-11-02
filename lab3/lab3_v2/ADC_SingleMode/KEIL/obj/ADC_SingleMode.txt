@@ -31,8 +31,8 @@
     Program header entries: 1
     Section header entries: 16
 
-    Program header offset: 314928 (0x0004ce30)
-    Section header offset: 314960 (0x0004ce50)
+    Program header offset: 315384 (0x0004cff8)
+    Section header offset: 315416 (0x0004d018)
 
     Section header string table index: 15
 
@@ -488,63 +488,63 @@
         0x00000334:    4370        pC      MULS     r0,r6,r0
         0x00000336:    4924        $I      LDR      r1,[pc,#144] ; [0x3c8] = 0xfff
         0x00000338:    f7ffff16    ....    BL       __aeabi_idiv ; 0x168
-        0x0000033c:    b2c1        ..      UXTB     r1,r0
-        0x0000033e:    2064        d       MOVS     r0,#0x64
-        0x00000340:    1a40        @.      SUBS     r0,r0,r1
-        0x00000342:    220a        ."      MOVS     r2,#0xa
-        0x00000344:    4350        PC      MULS     r0,r2,r0
-        0x00000346:    1c6d        m.      ADDS     r5,r5,#1
-        0x00000348:    b280        ..      UXTH     r0,r0
-        0x0000034a:    b2ed        ..      UXTB     r5,r5
-        0x0000034c:    4285        .B      CMP      r5,r0
-        0x0000034e:    d311        ..      BCC      0x374 ; AdcSingleModeTest + 128
-        0x00000350:    2c0f        .,      CMP      r4,#0xf
-        0x00000352:    d900        ..      BLS      0x356 ; AdcSingleModeTest + 98
-        0x00000354:    240c        .$      MOVS     r4,#0xc
-        0x00000356:    481d        .H      LDR      r0,[pc,#116] ; [0x3cc] = 0x50004080
-        0x00000358:    6882        .h      LDR      r2,[r0,#8]
-        0x0000035a:    230f        .#      MOVS     r3,#0xf
-        0x0000035c:    b292        ..      UXTH     r2,r2
-        0x0000035e:    031b        ..      LSLS     r3,r3,#12
-        0x00000360:    431a        .C      ORRS     r2,r2,r3
-        0x00000362:    6082        .`      STR      r2,[r0,#8]
-        0x00000364:    6883        .h      LDR      r3,[r0,#8]
-        0x00000366:    2201        ."      MOVS     r2,#1
-        0x00000368:    40a2        .@      LSLS     r2,r2,r4
-        0x0000036a:    4393        .C      BICS     r3,r3,r2
-        0x0000036c:    6083        .`      STR      r3,[r0,#8]
-        0x0000036e:    1c64        d.      ADDS     r4,r4,#1
-        0x00000370:    b2e4        ..      UXTB     r4,r4
-        0x00000372:    2500        .%      MOVS     r5,#0
-        0x00000374:    a016        ..      ADR      r0,{pc}+0x5c ; 0x3d0
-        0x00000376:    f000fb6f    ..o.    BL       __0printf$5 ; 0xa58
-        0x0000037a:    481b        .H      LDR      r0,[pc,#108] ; [0x3e8] = 0x20000004
-        0x0000037c:    6801        .h      LDR      r1,[r0,#0]
-        0x0000037e:    20ff        .       MOVS     r0,#0xff
-        0x00000380:    30f5        .0      ADDS     r0,r0,#0xf5
-        0x00000382:    4341        AC      MULS     r1,r0,r1
-        0x00000384:    4819        .H      LDR      r0,[pc,#100] ; [0x3ec] = 0xe000e000
-        0x00000386:    6141        Aa      STR      r1,[r0,#0x14]
-        0x00000388:    2200        ."      MOVS     r2,#0
-        0x0000038a:    6182        .a      STR      r2,[r0,#0x18]
-        0x0000038c:    2105        .!      MOVS     r1,#5
-        0x0000038e:    6101        .a      STR      r1,[r0,#0x10]
-        0x00000390:    6901        .i      LDR      r1,[r0,#0x10]
-        0x00000392:    03c9        ..      LSLS     r1,r1,#15
-        0x00000394:    d5fc        ..      BPL      0x390 ; AdcSingleModeTest + 156
-        0x00000396:    6102        .a      STR      r2,[r0,#0x10]
-        0x00000398:    480a        .H      LDR      r0,[pc,#40] ; [0x3c4] = 0x2000002c
-        0x0000039a:    6801        .h      LDR      r1,[r0,#0]
-        0x0000039c:    2900        .)      CMP      r1,#0
-        0x0000039e:    d0fc        ..      BEQ      0x39a ; AdcSingleModeTest + 166
-        0x000003a0:    2101        .!      MOVS     r1,#1
-        0x000003a2:    4638        8F      MOV      r0,r7
-        0x000003a4:    f7ffff57    ..W.    BL       ADC_DisableInt ; 0x256
-        0x000003a8:    68b8        .h      LDR      r0,[r7,#8]
-        0x000003aa:    b286        ..      UXTH     r6,r0
-        0x000003ac:    e7b1        ..      B        0x312 ; AdcSingleModeTest + 30
+        0x0000033c:    b2c6        ..      UXTB     r6,r0
+        0x0000033e:    4631        1F      MOV      r1,r6
+        0x00000340:    a022        ".      ADR      r0,{pc}+0x8c ; 0x3cc
+        0x00000342:    f000fb89    ....    BL       __0printf$5 ; 0xa58
+        0x00000346:    2064        d       MOVS     r0,#0x64
+        0x00000348:    1b80        ..      SUBS     r0,r0,r6
+        0x0000034a:    210a        .!      MOVS     r1,#0xa
+        0x0000034c:    4348        HC      MULS     r0,r1,r0
+        0x0000034e:    1c6d        m.      ADDS     r5,r5,#1
+        0x00000350:    b280        ..      UXTH     r0,r0
+        0x00000352:    b2ed        ..      UXTB     r5,r5
+        0x00000354:    4285        .B      CMP      r5,r0
+        0x00000356:    d311        ..      BCC      0x37c ; AdcSingleModeTest + 136
+        0x00000358:    2c0f        .,      CMP      r4,#0xf
+        0x0000035a:    d900        ..      BLS      0x35e ; AdcSingleModeTest + 106
+        0x0000035c:    240c        .$      MOVS     r4,#0xc
+        0x0000035e:    4821        !H      LDR      r0,[pc,#132] ; [0x3e4] = 0x50004080
+        0x00000360:    6881        .h      LDR      r1,[r0,#8]
+        0x00000362:    220f        ."      MOVS     r2,#0xf
+        0x00000364:    b289        ..      UXTH     r1,r1
+        0x00000366:    0312        ..      LSLS     r2,r2,#12
+        0x00000368:    4311        .C      ORRS     r1,r1,r2
+        0x0000036a:    6081        .`      STR      r1,[r0,#8]
+        0x0000036c:    6882        .h      LDR      r2,[r0,#8]
+        0x0000036e:    2101        .!      MOVS     r1,#1
+        0x00000370:    40a1        .@      LSLS     r1,r1,r4
+        0x00000372:    438a        .C      BICS     r2,r2,r1
+        0x00000374:    6082        .`      STR      r2,[r0,#8]
+        0x00000376:    1c64        d.      ADDS     r4,r4,#1
+        0x00000378:    b2e4        ..      UXTB     r4,r4
+        0x0000037a:    2500        .%      MOVS     r5,#0
+        0x0000037c:    481a        .H      LDR      r0,[pc,#104] ; [0x3e8] = 0x20000004
+        0x0000037e:    6801        .h      LDR      r1,[r0,#0]
+        0x00000380:    20ff        .       MOVS     r0,#0xff
+        0x00000382:    30f5        .0      ADDS     r0,r0,#0xf5
+        0x00000384:    4341        AC      MULS     r1,r0,r1
+        0x00000386:    4819        .H      LDR      r0,[pc,#100] ; [0x3ec] = 0xe000e000
+        0x00000388:    6141        Aa      STR      r1,[r0,#0x14]
+        0x0000038a:    2200        ."      MOVS     r2,#0
+        0x0000038c:    6182        .a      STR      r2,[r0,#0x18]
+        0x0000038e:    2105        .!      MOVS     r1,#5
+        0x00000390:    6101        .a      STR      r1,[r0,#0x10]
+        0x00000392:    6901        .i      LDR      r1,[r0,#0x10]
+        0x00000394:    03c9        ..      LSLS     r1,r1,#15
+        0x00000396:    d5fc        ..      BPL      0x392 ; AdcSingleModeTest + 158
+        0x00000398:    6102        .a      STR      r2,[r0,#0x10]
+        0x0000039a:    480a        .H      LDR      r0,[pc,#40] ; [0x3c4] = 0x2000002c
+        0x0000039c:    6801        .h      LDR      r1,[r0,#0]
+        0x0000039e:    2900        .)      CMP      r1,#0
+        0x000003a0:    d0fc        ..      BEQ      0x39c ; AdcSingleModeTest + 168
+        0x000003a2:    2101        .!      MOVS     r1,#1
+        0x000003a4:    4638        8F      MOV      r0,r7
+        0x000003a6:    f7ffff56    ..V.    BL       ADC_DisableInt ; 0x256
+        0x000003aa:    68b8        .h      LDR      r0,[r7,#8]
+        0x000003ac:    b286        ..      UXTH     r6,r0
+        0x000003ae:    e7b0        ..      B        0x312 ; AdcSingleModeTest + 30
     $d
-        0x000003ae:    0000        ..      DCW    0
         0x000003b0:    0000000a    ....    DCD    10
         0x000003b4:    00000ec4    ....    DCD    3780
         0x000003b8:    00000f10    ....    DCD    3856
@@ -552,13 +552,13 @@
         0x000003c0:    e000e100    ....    DCD    3758153984
         0x000003c4:    2000002c    ,..     DCD    536870956
         0x000003c8:    00000fff    ....    DCD    4095
-        0x000003cc:    50004080    .@.P    DCD    1342193792
-        0x000003d0:    75736552    Resu    DCD    1970496850
-        0x000003d4:    6f20746c    lt o    DCD    1864397932
-        0x000003d8:    68632066    f ch    DCD    1751326822
-        0x000003dc:    656e6e61    anne    DCD    1701736033
-        0x000003e0:    25203a6c    l: %    DCD    622869100
-        0x000003e4:    00000a64    d...    DCD    2660
+        0x000003cc:    75736552    Resu    DCD    1970496850
+        0x000003d0:    6f20746c    lt o    DCD    1864397932
+        0x000003d4:    68632066    f ch    DCD    1751326822
+        0x000003d8:    656e6e61    anne    DCD    1701736033
+        0x000003dc:    25203a6c    l: %    DCD    622869100
+        0x000003e0:    00000a64    d...    DCD    2660
+        0x000003e4:    50004080    .@.P    DCD    1342193792
         0x000003e8:    20000004    ...     DCD    536870916
         0x000003ec:    e000e000    ....    DCD    3758153728
     $t
@@ -1940,7 +1940,7 @@
 
 
 ** Section #6 '.debug_info' (SHT_PROGBITS)
-    Size   : 27624 bytes
+    Size   : 28080 bytes
 
 
 ** Section #7 '.debug_line' (SHT_PROGBITS)

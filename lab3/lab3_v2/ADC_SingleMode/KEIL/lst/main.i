@@ -22113,8 +22113,14 @@ void AdcSingleModeTest()
 				g_u32AdcIntFlag = 0;
 				((((ADC_T *) ((( uint32_t)0x40000000) + 0xE0000)))->ADCR |= (1ul << 11));		
 				
+			
+				 
 				scaledValue = (i32ConversionData * 100) / 4095;
-				referenceValue = (100-scaledValue)*10;			
+				printf("Result of channel: %d\n", scaledValue);
+
+			
+				 
+				referenceValue = (100-scaledValue)*10;
 				counter++;
 			  if(counter>=referenceValue){
 						if(GPIO_counter>15)GPIO_counter=12;
@@ -22123,7 +22129,9 @@ void AdcSingleModeTest()
 						GPIO_counter++;
 						counter=0;
 				}
-				printf("Result of channel: %d\n", scaledValue);
+				
+				
+				
 				CLK_SysTickDelay(500);  
 
 				
@@ -22135,9 +22143,6 @@ void AdcSingleModeTest()
 
 				 
 				i32ConversionData = ((((ADC_T *) ((( uint32_t)0x40000000) + 0xE0000)))->ADDR[(2)] & (0xFFFFul << 0));
-
-
-
 		}
 
 }
@@ -22195,7 +22200,6 @@ int main(void)
     printf("\nExit ADC sample code\n");
 
     while(1);
-
 }
 
 
