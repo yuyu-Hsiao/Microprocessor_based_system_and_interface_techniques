@@ -34,7 +34,7 @@ void AdcSingleModeTest(void);
 /* Define global variables and constants                                                                   */
 /*---------------------------------------------------------------------------------------------------------*/
 volatile uint32_t g_u32AdcIntFlag;
-int32_t  i32ConversionData = 1;
+
 
 
 void SYS_Init(void){
@@ -125,7 +125,7 @@ void GPIO_Init(void)
 
 void AdcSingleModeTest()
 {
-    
+    int32_t  i32ConversionData;
 		uint8_t scaledValue;
 		uint16_t referenceValue = 0;
 		uint8_t GPIO_counter = 12;
@@ -186,7 +186,6 @@ void ADC_IRQHandler(void)
 	
 		/* 對ADSR.ADF寫1，這樣可以將此位元變成0 */
 		ADC_CLR_INT_FLAG(ADC, ADC_ADF_INT);
-		printf("1/n");
 }
 
 
