@@ -51,13 +51,7 @@ int main(void)
     printf("|                   NUC100 SPI Driver Sample Code                    |\n");
     printf("+--------------------------------------------------------------------+\n");
     printf("\n");
-    printf("\nThis sample code demonstrates SPI0 self loop back data transfer.\n");
-    printf(" SPI0 configuration:\n");
-    printf("     Master mode; data width 32 bits.\n");
-    printf(" I/O connection:\n");
-    printf("     PC.3 SPI0_MOSI0 <--> PC.2 SPI0_MISO0 \n");
 
-    printf("\nSPI0 Loopback test ");
 
     u32Err = 0;
     for(u32TestCount = 0; u32TestCount < 0x1000; u32TestCount++)
@@ -164,10 +158,11 @@ void SPI_Init(void)
     /*---------------------------------------------------------------------------------------------------------*/
     /* Configure as a master, clock idle low, 32-bit transaction, drive output on falling clock edge and latch input on rising edge. */
     /* Set IP clock divider. SPI clock rate = 2 MHz */
-    SPI_Open(SPI0, SPI_MASTER, SPI_MODE_0, 32, 2000000);
+    SPI_Open(SPI2, SPI_MASTER, SPI_MODE_3, 8, 2000000);
 
     /* Enable the automatic hardware slave select function. Select the SPI0_SS0 pin and configure as low-active. */
-    SPI_EnableAutoSS(SPI0, SPI_SS0, SPI_SS_ACTIVE_LOW);
+    //SPI_EnableAutoSS(SPI0, SPI_SS0, SPI_SS_ACTIVE_LOW);
+		SPI_DisableAutoSS(SPI2);
 }
 
 /*** (C) COPYRIGHT 2014 Nuvoton Technology Corp. ***/
