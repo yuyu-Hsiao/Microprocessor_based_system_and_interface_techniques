@@ -1,15 +1,4 @@
-/******************************************************************************
- * @file     main.c
- * @version  V2.00
- * $Revision: 3 $
- * $Date: 15/04/20 2:56p $
- * @brief
- *           Implement SPI Master loop back transfer.
- *           This sample code needs to connect SPI0_MISO0 pin and SPI0_MOSI0 pin together.
- *           It will compare the received data with transmitted data.
- * @note
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
-*****************************************************************************/
+
 #include <stdio.h>
 #include "NUC100Series.h"
 
@@ -24,12 +13,17 @@ uint32_t g_au32DestinationData[TEST_COUNT];
 void SYS_Init(void);
 void SPI_Init(void);
 
+
+void ADXL_write(uint8_t address, uint8_t data);
+uint8_t ADXL_read(uint8_t address);
+void ADXL_init(void);
+
 /* ------------- */
 /* Main function */
 /* ------------- */
 int main(void)
 {
-    uint32_t u32DataCount, u32TestCount, u32Err;
+		uint8_t addr;
 
     /* Unlock protected registers */
     SYS_UnlockReg();
@@ -43,8 +37,9 @@ int main(void)
     /* Configure UART0: 115200, 8-bit word, no parity bit, 1 stop bit. */
     UART_Open(UART0, 115200);
 
-    /* Init SPI */
-    SPI_Init();
+    
+    SPI_Init();		/* Init SPI */
+	  ADXL_init();	/* Init ADXL */
 
     printf("\n\n");
     printf("+--------------------------------------------------------------------+\n");
@@ -53,58 +48,14 @@ int main(void)
     printf("\n");
 
 
-    u32Err = 0;
-    for(u32TestCount = 0; u32TestCount < 0x1000; u32TestCount++)
-    {
-        /* set the source data and clear the destination buffer */
-        for(u32DataCount = 0; u32DataCount < TEST_COUNT; u32DataCount++)
-        {
-            g_au32SourceData[u32DataCount] = u32DataCount;
-            g_au32DestinationData[u32DataCount] = 0;
-        }
+		while(1)
+		{
+				addr = ADXL_read(0x00);
+				printf("\ndevice:%d",addr);
+		}
 
-        u32DataCount = 0;
-
-        if((u32TestCount & 0x1FF) == 0)
-        {
-            putchar('.');
-        }
-
-        while(1)
-        {
-            /* Write to TX register */
-            SPI_WRITE_TX0(SPI0, g_au32SourceData[u32DataCount]);
-            /* Trigger SPI data transfer */
-            SPI_TRIGGER(SPI0);
-            /* Check SPI0 busy status */
-            while(SPI_IS_BUSY(SPI0));
-            /* Read received data */
-            g_au32DestinationData[u32DataCount] = SPI_READ_RX0(SPI0);
-            u32DataCount++;
-            if(u32DataCount > TEST_COUNT)
-                break;
-        }
-
-        /*  Check the received data */
-        for(u32DataCount = 0; u32DataCount < TEST_COUNT; u32DataCount++)
-        {
-            if(g_au32DestinationData[u32DataCount] != g_au32SourceData[u32DataCount])
-                u32Err = 1;
-        }
-
-        if(u32Err)
-            break;
-    }
-
-    if(u32Err)
-        printf(" [FAIL]\n\n");
-    else
-        printf(" [PASS]\n\n");
-
-    /* Close SPI0 */
-    SPI_Close(SPI0);
-
-    while(1);
+    /* Close SPI2 */
+    //SPI_Close(SPI2);
 }
 
 void SYS_Init(void)
@@ -127,13 +78,13 @@ void SYS_Init(void)
     /* Select HXT as the clock source of UART0 */
     CLK_SetModuleClock(UART0_MODULE, CLK_CLKSEL1_UART_S_HXT, CLK_CLKDIV_UART(1));
 
-    /* Select HCLK as the clock source of SPI0 */
-    CLK_SetModuleClock(SPI0_MODULE, CLK_CLKSEL1_SPI0_S_HCLK, MODULE_NoMsk);
+    /* Select HCLK as the clock source of SPI2 */
+    CLK_SetModuleClock(SPI2_MODULE, CLK_CLKSEL1_SPI2_S_HCLK, MODULE_NoMsk);
 
     /* Enable UART peripheral clock */
     CLK_EnableModuleClock(UART0_MODULE);
-    /* Enable SPI0 peripheral clock */
-    CLK_EnableModuleClock(SPI0_MODULE);
+    /* Enable SPI2 peripheral clock */
+    CLK_EnableModuleClock(SPI2_MODULE);
 
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init I/O Multi-function                                                                                 */
@@ -142,10 +93,9 @@ void SYS_Init(void)
     /* Set PB multi-function pins for UART0 RXD and TXD */
     SYS->GPB_MFP = SYS_GPB_MFP_PB0_UART0_RXD | SYS_GPB_MFP_PB1_UART0_TXD;
 
-    /* Setup SPI0 multi-function pins */
-    SYS->GPC_MFP = SYS_GPC_MFP_PC0_SPI0_SS0 | SYS_GPC_MFP_PC1_SPI0_CLK | SYS_GPC_MFP_PC2_SPI0_MISO0 | SYS_GPC_MFP_PC3_SPI0_MOSI0;
-    SYS->ALT_MFP = SYS_ALT_MFP_PC0_SPI0_SS0 | SYS_ALT_MFP_PC1_SPI0_CLK | SYS_ALT_MFP_PC2_SPI0_MISO0 | SYS_ALT_MFP_PC3_SPI0_MOSI0;
-
+    /* Setup SPI2 multi-function pins */  //GPD_MFP  page.80
+    SYS->GPD_MFP = SYS_GPD_MFP_PD0_SPI2_SS0 | SYS_GPD_MFP_PD1_SPI2_CLK | SYS_GPD_MFP_PD2_SPI2_MISO0 | SYS_GPD_MFP_PD3_SPI2_MOSI0;
+    
     /* Update System Core Clock */
     /* User can use SystemCoreClockUpdate() to calculate SystemCoreClock and CyclesPerUs automatically. */
     SystemCoreClockUpdate();
@@ -156,14 +106,57 @@ void SPI_Init(void)
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init SPI                                                                                                */
     /*---------------------------------------------------------------------------------------------------------*/
-    /* Configure as a master, clock idle low, 32-bit transaction, drive output on falling clock edge and latch input on rising edge. */
-    /* Set IP clock divider. SPI clock rate = 2 MHz */
-    SPI_Open(SPI2, SPI_MASTER, SPI_MODE_3, 8, 2000000);
-
-    /* Enable the automatic hardware slave select function. Select the SPI0_SS0 pin and configure as low-active. */
-    //SPI_EnableAutoSS(SPI0, SPI_SS0, SPI_SS_ACTIVE_LOW);
+    SPI_Open(SPI2, SPI_MASTER, SPI_MODE_3, 8, 2000000);   
 		SPI_DisableAutoSS(SPI2);
 }
+
+
+
+void ADXL_write(uint8_t address, uint8_t data){
+		/* #define SPI_WRITE_TX0(spi, u32TxData)   ((spi)->TX[0] = (u32TxData)) */
+		
+		SPI_WRITE_TX0(SPI2, 0x3F|address);	//set bit7 low to write ADXL   ADXL page.16
+		SPI_SET_SS0_LOW(SPI2);
+		SPI_TRIGGER(SPI2);
+		while(SPI_IS_BUSY(SPI2));	/* Check SPI2 busy status */
+	
+		SPI_WRITE_TX0(SPI2, data);
+		while(SPI_IS_BUSY(SPI2));
+		SPI_SET_SS0_HIGH(SPI2);
+		
+}
+
+
+uint8_t ADXL_read(uint8_t address){
+		
+		uint8_t read_content;
+		SPI_WRITE_TX0(SPI2, 0x80|address);	//set bit7 high to read ADXL   ADXL page.16
+		SPI_SET_SS0_LOW(SPI2);							//set ss(slave-select)(ADXL) low
+		SPI_TRIGGER(SPI2);
+		while(SPI_IS_BUSY(SPI2));	/* Check SPI2 busy status */
+
+		//Read the contents of register
+		SPI_TRIGGER(SPI2);
+		while(SPI_IS_BUSY(SPI2));
+		read_content = SPI_READ_RX0(SPI2);
+	
+		SPI_SET_SS0_HIGH(SPI2);							//set ss(slave-select)(ADXL) high
+	
+		return read_content;
+}
+
+void ADXL_init(void){
+	/*-----------------------------*/
+	/*  Initial ADXL345            */
+	/*	POWER_CTL(0x2D): 0x08      */
+	/*	DATA_FORMAT(0x31): 0x0B    */
+	/*	FIFO_CTL(0x38): 0x80       */
+	/*-----------------------------*/
+		ADXL_write(0x2D, 0x08);
+		ADXL_write(0x31, 0x0B);
+		ADXL_write(0x38, 0x80);
+}
+
 
 /*** (C) COPYRIGHT 2014 Nuvoton Technology Corp. ***/
 

@@ -1,16 +1,5 @@
 #line 1 "..\\main.c"
 
-
-
-
-
-
-
-
-
-
-
- 
 #line 1 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdio.h"
  
  
@@ -910,7 +899,7 @@ extern __declspec(__nothrow) void __use_no_semihosting(void);
 
  
 
-#line 14 "..\\main.c"
+#line 3 "..\\main.c"
 #line 1 "..\\..\\Library\\Device\\Nuvoton\\NUC100Series\\Include\\NUC100Series.h"
  
 
@@ -21981,7 +21970,7 @@ void ACMP_Close(ACMP_T *, uint32_t u32ChNum);
 
 
 
-#line 15 "..\\main.c"
+#line 4 "..\\main.c"
 
 
 
@@ -21994,12 +21983,17 @@ uint32_t g_au32DestinationData[64];
 void SYS_Init(void);
 void SPI_Init(void);
 
+
+void ADXL_write(uint8_t address, uint8_t data);
+uint8_t ADXL_read(uint8_t address);
+void ADXL_init(void);
+
  
  
  
 int main(void)
 {
-    uint32_t u32DataCount, u32TestCount, u32Err;
+		uint8_t addr;
 
      
     SYS_UnlockReg();
@@ -22013,74 +22007,25 @@ int main(void)
      
     UART_Open(((UART_T *) ((( uint32_t)0x40000000) + 0x50000)), 115200);
 
-     
-    SPI_Init();
+    
+    SPI_Init();		 
+	  ADXL_init();	 
 
     printf("\n\n");
     printf("+--------------------------------------------------------------------+\n");
     printf("|                   NUC100 SPI Driver Sample Code                    |\n");
     printf("+--------------------------------------------------------------------+\n");
     printf("\n");
-    printf("\nThis sample code demonstrates SPI0 self loop back data transfer.\n");
-    printf(" SPI0 configuration:\n");
-    printf("     Master mode; data width 32 bits.\n");
-    printf(" I/O connection:\n");
-    printf("     PC.3 SPI0_MOSI0 <--> PC.2 SPI0_MISO0 \n");
 
-    printf("\nSPI0 Loopback test ");
 
-    u32Err = 0;
-    for(u32TestCount = 0; u32TestCount < 0x1000; u32TestCount++)
-    {
-         
-        for(u32DataCount = 0; u32DataCount < 64; u32DataCount++)
-        {
-            g_au32SourceData[u32DataCount] = u32DataCount;
-            g_au32DestinationData[u32DataCount] = 0;
-        }
-
-        u32DataCount = 0;
-
-        if((u32TestCount & 0x1FF) == 0)
-        {
-            putc('.', (& __stdout));
-        }
-
-        while(1)
-        {
-             
-            ((((SPI_T *) ((( uint32_t)0x40000000) + 0x30000)))->TX[0] = (g_au32SourceData[u32DataCount]));
-             
-            ((((SPI_T *) ((( uint32_t)0x40000000) + 0x30000)))->CNTRL |= (1ul << 0));
-             
-            while(( ((((SPI_T *) ((( uint32_t)0x40000000) + 0x30000)))->CNTRL & (1ul << 0))>>0 ));
-             
-            g_au32DestinationData[u32DataCount] = ((((SPI_T *) ((( uint32_t)0x40000000) + 0x30000)))->RX[0]);
-            u32DataCount++;
-            if(u32DataCount > 64)
-                break;
-        }
-
-         
-        for(u32DataCount = 0; u32DataCount < 64; u32DataCount++)
-        {
-            if(g_au32DestinationData[u32DataCount] != g_au32SourceData[u32DataCount])
-                u32Err = 1;
-        }
-
-        if(u32Err)
-            break;
-    }
-
-    if(u32Err)
-        printf(" [FAIL]\n\n");
-    else
-        printf(" [PASS]\n\n");
+		while(1)
+		{
+				addr = ADXL_read(0x00);
+				printf("\ndevice:%d",addr);
+		}
 
      
-    SPI_Close(((SPI_T *) ((( uint32_t)0x40000000) + 0x30000)));
-
-    while(1);
+    
 }
 
 void SYS_Init(void)
@@ -22104,12 +22049,12 @@ void SYS_Init(void)
     CLK_SetModuleClock(((((1) & 0x03) << 30)|(((16) & 0x1f) << 0)| (((1) & 0x03) << 28)|(((3) & 0x07) << 25)|(((24) & 0x1f) << 20)| (((0) & 0x03) << 18)|(((0x0F) & 0xff) << 10)|(((8) & 0x1f) << 5)), (0x0UL<<24), (((1)-1) << 8));
 
      
-    CLK_SetModuleClock(((((1) & 0x03) << 30)|(((12) & 0x1f) << 0) | (((1) & 0x03) << 28)|(((1) & 0x07) << 25)|(((4) & 0x1f) << 20)| (((0x0) & 0x03) << 18)|(((0x0) & 0xff) << 10)|(((0x0) & 0x1f) << 5)), (0x1UL<<4), 0x0);
+    CLK_SetModuleClock(((((1) & 0x03) << 30)|(((14) & 0x1f) << 0) | (((1) & 0x03) << 28)|(((1) & 0x07) << 25)|(((6) & 0x1f) << 20)| (((0x0) & 0x03) << 18)|(((0x0) & 0xff) << 10)|(((0x0) & 0x1f) << 5)), (0x1UL<<6), 0x0);
 
      
     CLK_EnableModuleClock(((((1) & 0x03) << 30)|(((16) & 0x1f) << 0)| (((1) & 0x03) << 28)|(((3) & 0x07) << 25)|(((24) & 0x1f) << 20)| (((0) & 0x03) << 18)|(((0x0F) & 0xff) << 10)|(((8) & 0x1f) << 5)));
      
-    CLK_EnableModuleClock(((((1) & 0x03) << 30)|(((12) & 0x1f) << 0) | (((1) & 0x03) << 28)|(((1) & 0x07) << 25)|(((4) & 0x1f) << 20)| (((0x0) & 0x03) << 18)|(((0x0) & 0xff) << 10)|(((0x0) & 0x1f) << 5)));
+    CLK_EnableModuleClock(((((1) & 0x03) << 30)|(((14) & 0x1f) << 0) | (((1) & 0x03) << 28)|(((1) & 0x07) << 25)|(((6) & 0x1f) << 20)| (((0x0) & 0x03) << 18)|(((0x0) & 0xff) << 10)|(((0x0) & 0x1f) << 5)));
 
      
      
@@ -22119,9 +22064,8 @@ void SYS_Init(void)
     ((GCR_T *) ((( uint32_t)0x50000000) + 0x00000))->GPB_MFP = (1UL<<0) | (1UL<<1);
 
      
-    ((GCR_T *) ((( uint32_t)0x50000000) + 0x00000))->GPC_MFP = (1UL<<0) | (1UL<<1) | (1UL<<2) | (1UL<<3);
-    ((GCR_T *) ((( uint32_t)0x50000000) + 0x00000))->ALT_MFP = 0x00000000UL | 0x00000000UL | 0x00000000UL | 0x00000000UL;
-
+    ((GCR_T *) ((( uint32_t)0x50000000) + 0x00000))->GPD_MFP = (1UL<<0) | (1UL<<1) | (1UL<<2) | (1UL<<3);
+    
      
      
     SystemCoreClockUpdate();
@@ -22132,13 +22076,57 @@ void SPI_Init(void)
      
      
      
-     
-     
-    SPI_Open(((SPI_T *) ((( uint32_t)0x40000000) + 0x30000)), (0x0), ((1ul << 2)), 32, 2000000);
-
-     
-    SPI_EnableAutoSS(((SPI_T *) ((( uint32_t)0x40000000) + 0x30000)), (1<<0), (0x0));
+    SPI_Open(((SPI_T *) ((( uint32_t)0x40100000) + 0x30000)), (0x0), ((1ul << 11) | (1ul << 2)), 8, 2000000);   
+		SPI_DisableAutoSS(((SPI_T *) ((( uint32_t)0x40100000) + 0x30000)));
 }
+
+
+
+void ADXL_write(uint8_t address, uint8_t data){
+		 
+		
+		((((SPI_T *) ((( uint32_t)0x40100000) + 0x30000)))->TX[0] = (0x3F|address));	
+		((((SPI_T *) ((( uint32_t)0x40100000) + 0x30000)))->SSR = ((((SPI_T *) ((( uint32_t)0x40100000) + 0x30000)))->SSR & ~((1ul << 3)|(1ul << 2)|(1<<0))) | (1<<0));
+		((((SPI_T *) ((( uint32_t)0x40100000) + 0x30000)))->CNTRL |= (1ul << 0));
+		while(( ((((SPI_T *) ((( uint32_t)0x40100000) + 0x30000)))->CNTRL & (1ul << 0))>>0 ));	 
+	
+		((((SPI_T *) ((( uint32_t)0x40100000) + 0x30000)))->TX[0] = (data));
+		while(( ((((SPI_T *) ((( uint32_t)0x40100000) + 0x30000)))->CNTRL & (1ul << 0))>>0 ));
+		((((SPI_T *) ((( uint32_t)0x40100000) + 0x30000)))->SSR = ((((SPI_T *) ((( uint32_t)0x40100000) + 0x30000)))->SSR & ~((1ul << 3)|(1ul << 2)|(1<<0))));
+		
+}
+
+
+uint8_t ADXL_read(uint8_t address){
+		
+		uint8_t read_content;
+		((((SPI_T *) ((( uint32_t)0x40100000) + 0x30000)))->TX[0] = (0x80|address));	
+		((((SPI_T *) ((( uint32_t)0x40100000) + 0x30000)))->SSR = ((((SPI_T *) ((( uint32_t)0x40100000) + 0x30000)))->SSR & ~((1ul << 3)|(1ul << 2)|(1<<0))) | (1<<0));							
+		((((SPI_T *) ((( uint32_t)0x40100000) + 0x30000)))->CNTRL |= (1ul << 0));
+		while(( ((((SPI_T *) ((( uint32_t)0x40100000) + 0x30000)))->CNTRL & (1ul << 0))>>0 ));	 
+
+		
+		((((SPI_T *) ((( uint32_t)0x40100000) + 0x30000)))->CNTRL |= (1ul << 0));
+		while(( ((((SPI_T *) ((( uint32_t)0x40100000) + 0x30000)))->CNTRL & (1ul << 0))>>0 ));
+		read_content = ((((SPI_T *) ((( uint32_t)0x40100000) + 0x30000)))->RX[0]);
+	
+		((((SPI_T *) ((( uint32_t)0x40100000) + 0x30000)))->SSR = ((((SPI_T *) ((( uint32_t)0x40100000) + 0x30000)))->SSR & ~((1ul << 3)|(1ul << 2)|(1<<0))));							
+	
+		return read_content;
+}
+
+void ADXL_init(void){
+	 
+	 
+	 
+	 
+	 
+	 
+		ADXL_write(0x2D, 0x08);
+		ADXL_write(0x31, 0x0B);
+		ADXL_write(0x38, 0x80);
+}
+
 
  
 
