@@ -22036,6 +22036,10 @@ int main(void)
 			 
 			 
 			
+			
+			
+			
+			 
 			rd_xaxis = (ADXL_read(0x33)<<8)|ADXL_read(0x32);
 			rd_yaxis = (ADXL_read(0x35)<<8)|ADXL_read(0x34);
 			rd_zaxis = (ADXL_read(0x37)<<8)|ADXL_read(0x36);
@@ -22051,6 +22055,7 @@ int main(void)
 			cd_zaxis = (float)(rd_zaxis - offset) / (256 + offset);
 
 			printf("x: %.2f, y: %.2f, z: %.2f\n", cd_xaxis, cd_yaxis, cd_zaxis);
+			 
 			
 
 			CLK_SysTickDelay(100000);  
@@ -22118,12 +22123,13 @@ void SPI_Init(void)
 void ADXL_write(uint8_t address, uint8_t data){
 		 
 		
-		((((SPI_T *) ((( uint32_t)0x40100000) + 0x30000)))->TX[0] = (0x3F|address));	
+		((((SPI_T *) ((( uint32_t)0x40100000) + 0x30000)))->TX[0] = (0x3F&address));	
 		((((SPI_T *) ((( uint32_t)0x40100000) + 0x30000)))->SSR = ((((SPI_T *) ((( uint32_t)0x40100000) + 0x30000)))->SSR & ~((1ul << 3)|(1ul << 2)|(1<<0))) | (1<<0));
 		((((SPI_T *) ((( uint32_t)0x40100000) + 0x30000)))->CNTRL |= (1ul << 0));
 		while(( ((((SPI_T *) ((( uint32_t)0x40100000) + 0x30000)))->CNTRL & (1ul << 0))>>0 ));	 
 	
 		((((SPI_T *) ((( uint32_t)0x40100000) + 0x30000)))->TX[0] = (data));
+		((((SPI_T *) ((( uint32_t)0x40100000) + 0x30000)))->CNTRL |= (1ul << 0));
 		while(( ((((SPI_T *) ((( uint32_t)0x40100000) + 0x30000)))->CNTRL & (1ul << 0))>>0 ));
 		((((SPI_T *) ((( uint32_t)0x40100000) + 0x30000)))->SSR = ((((SPI_T *) ((( uint32_t)0x40100000) + 0x30000)))->SSR & ~((1ul << 3)|(1ul << 2)|(1<<0))));
 		

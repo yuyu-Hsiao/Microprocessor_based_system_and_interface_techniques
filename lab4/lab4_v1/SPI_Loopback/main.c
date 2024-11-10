@@ -66,6 +66,10 @@ int main(void)
 			/*	DATAZ0(0x36), DATAZ1(0x37)   */
 			/*-------------------------------*/
 			
+			//device_num = ADXL_read(0x00);
+			//printf("\ndevice: 0x%02X\n", device_num);
+			
+			/**/
 			rd_xaxis = (ADXL_read(0x33)<<8)|ADXL_read(0x32);
 			rd_yaxis = (ADXL_read(0x35)<<8)|ADXL_read(0x34);
 			rd_zaxis = (ADXL_read(0x37)<<8)|ADXL_read(0x36);
@@ -81,6 +85,7 @@ int main(void)
 			cd_zaxis = (float)(rd_zaxis - offset) / (256 + offset);
 
 			printf("x: %.2f, y: %.2f, z: %.2f\n", cd_xaxis, cd_yaxis, cd_zaxis);
+			/**/
 			
 
 			CLK_SysTickDelay(100000);  //delay 100ms
@@ -148,12 +153,13 @@ void SPI_Init(void)
 void ADXL_write(uint8_t address, uint8_t data){
 		/* #define SPI_WRITE_TX0(spi, u32TxData)   ((spi)->TX[0] = (u32TxData)) */
 		
-		SPI_WRITE_TX0(SPI2, 0x3F|address);	//set bit7 low to write ADXL   ADXL page.16
+		SPI_WRITE_TX0(SPI2, 0x3F&address);	//set bit7 low to write ADXL   ADXL page.16
 		SPI_SET_SS0_LOW(SPI2);
 		SPI_TRIGGER(SPI2);
 		while(SPI_IS_BUSY(SPI2));	/* Check SPI2 busy status */
 	
 		SPI_WRITE_TX0(SPI2, data);
+		SPI_TRIGGER(SPI2);
 		while(SPI_IS_BUSY(SPI2));
 		SPI_SET_SS0_HIGH(SPI2);
 		
