@@ -21994,11 +21994,9 @@ void ADXL_init(void);
 int main(void)
 {
 		uint8_t device_num;
-		
 		int16_t rd_xaxis,rd_yaxis,rd_zaxis;
 		int8_t offset;
 		float cd_xaxis, cd_yaxis, cd_zaxis;
-
 	
      
     SYS_UnlockReg();
@@ -22035,30 +22033,23 @@ int main(void)
 			 
 			 
 			 
-			
-			
-			
-			
-			 
 			rd_xaxis = (ADXL_read(0x33)<<8)|ADXL_read(0x32);
 			rd_yaxis = (ADXL_read(0x35)<<8)|ADXL_read(0x34);
 			rd_zaxis = (ADXL_read(0x37)<<8)|ADXL_read(0x36);
 			
 
 			offset = ADXL_read(0x1E);
-			cd_xaxis = (float)(rd_xaxis - offset) / (256 + offset);
+			cd_xaxis = (float)(rd_xaxis - offset) / (256 - offset);
 			
 			offset = ADXL_read(0x1F);
-			cd_yaxis = (float)(rd_yaxis - offset) / (256 + offset);
+			cd_yaxis = (float)(rd_yaxis - offset) / (256 - offset);
 			
 			offset = ADXL_read(0x20);
-			cd_zaxis = (float)(rd_zaxis - offset) / (256 + offset);
+			cd_zaxis = (float)(rd_zaxis - offset) / (256 - offset);
 
 			printf("x: %.2f, y: %.2f, z: %.2f\n", cd_xaxis, cd_yaxis, cd_zaxis);
-			 
 			
-
-			CLK_SysTickDelay(100000);  
+			CLK_SysTickDelay(500000);  
 			
 		}
 

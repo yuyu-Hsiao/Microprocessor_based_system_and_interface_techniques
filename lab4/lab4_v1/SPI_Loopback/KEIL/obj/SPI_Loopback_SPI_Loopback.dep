@@ -27,7 +27,7 @@ I (..\..\Library\StdDriver\inc\PS2.h)(0x6730C8D8)
 I (..\..\Library\StdDriver\inc\CLK.h)(0x6730C8D8)
 I (..\..\Library\StdDriver\inc\ACMP.h)(0x6730C8D8)
 F (..\..\Library\Device\Nuvoton\NUC100Series\Source\ARM\startup_NUC100Series.s)(0x6730C8D8)(--cpu Cortex-M0 --pd "__EVAL SETA 1" -g --16 --apcs=interwork --pd "__MICROLIB SETA 1"-IC:\Keil_v5\ARM\RV31\INC-IC:\Keil_v5\ARM\CMSIS\Include-IC:\Keil_v5\ARM\INC\Nuvoton\M051Series--pd "__UVISION_VERSION SETA 524"--list .\lst\startup_nuc100series.lst --xref -o .\obj\startup_nuc100series.o --depend .\obj\startup_nuc100series.d)
-F (..\main.c)(0x6730DFFA)(-c --cpu Cortex-M0 -D__EVAL -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ..\..\Library\Device\Nuvoton\NUC100Series\Include -I ..\..\Library\CMSIS\Include -I ..\..\Library\StdDriver\inc-IC:\Keil_v5\ARM\RV31\INC-IC:\Keil_v5\ARM\CMSIS\Include-IC:\Keil_v5\ARM\INC\Nuvoton\M051Series-D__UVISION_VERSION="524"-o .\obj\main.o --omf_browse .\obj\main.crf --depend .\obj\main.d)
+F (..\main.c)(0x6732C327)(-c --cpu Cortex-M0 -D__EVAL -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I ..\..\Library\Device\Nuvoton\NUC100Series\Include -I ..\..\Library\CMSIS\Include -I ..\..\Library\StdDriver\inc-IC:\Keil_v5\ARM\RV31\INC-IC:\Keil_v5\ARM\CMSIS\Include-IC:\Keil_v5\ARM\INC\Nuvoton\M051Series-D__UVISION_VERSION="524"-o .\obj\main.o --omf_browse .\obj\main.crf --depend .\obj\main.d)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x588B8344)
 I (..\..\Library\Device\Nuvoton\NUC100Series\Include\NUC100Series.h)(0x6730C8D8)
 I (..\..\Library\CMSIS\Include\core_cm0.h)(0x6730C8D8)
