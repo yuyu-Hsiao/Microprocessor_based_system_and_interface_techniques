@@ -1,13 +1,10 @@
 
+//SPI page.288
+
 #include <stdio.h>
 #include "NUC100Series.h"
 
 #define PLL_CLOCK           50000000
-
-#define TEST_COUNT             64
-
-uint32_t g_au32SourceData[TEST_COUNT];
-uint32_t g_au32DestinationData[TEST_COUNT];
 
 /* Function prototype declaration */
 void SYS_Init(void);
