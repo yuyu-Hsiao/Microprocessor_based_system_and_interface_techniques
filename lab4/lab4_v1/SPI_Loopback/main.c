@@ -10,7 +10,6 @@
 void SYS_Init(void);
 void SPI_Init(void);
 
-
 void ADXL_write(uint8_t address, uint8_t data);
 uint8_t ADXL_read(uint8_t address);
 void ADXL_init(void);
@@ -145,7 +144,7 @@ void ADXL_write(uint8_t address, uint8_t data){
 		SPI_WRITE_TX0(SPI2, 0x3F&address);	//set bit7 low to write ADXL   ADXL page.16
 		SPI_SET_SS0_LOW(SPI2);
 		SPI_TRIGGER(SPI2);
-		while(SPI_IS_BUSY(SPI2));	/* Check SPI2 busy status */
+		while(SPI_IS_BUSY(SPI2));						/* Check SPI2 busy status */
 	
 		SPI_WRITE_TX0(SPI2, data);
 		SPI_TRIGGER(SPI2);
@@ -161,7 +160,7 @@ uint8_t ADXL_read(uint8_t address){
 		SPI_WRITE_TX0(SPI2, 0x80|address);	//set bit7 high to read ADXL   ADXL page.16
 		SPI_SET_SS0_LOW(SPI2);							//set ss(slave-select)(ADXL) low
 		SPI_TRIGGER(SPI2);
-		while(SPI_IS_BUSY(SPI2));	/* Check SPI2 busy status */
+		while(SPI_IS_BUSY(SPI2));						/* Check SPI2 busy status */
 
 		//Read the contents of register
 		SPI_TRIGGER(SPI2);
