@@ -838,17 +838,17 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-       912        122         56          0          0       6414   clk.o
-       100         12          0          0          0       2704   i2c.o
-      1212        540          0         20          0     139531   main.o
-       280        132          0          4          0       4930   retarget.o
-        76         32        192          0       1024        768   startup_nuc100series.o
+       912        122         56          0          0       6426   clk.o
+       100         12          0          0          0       2712   i2c.o
+      1212        540          0         20          0     139563   main.o
+       280        132          0          4          0       4942   retarget.o
+        76         32        192          0       1024        772   startup_nuc100series.o
         26          0          0          0          0        542   sys.o
-       146         26          0         44          0     118399   system_nuc100series.o
-       224         34         48          0          0       2168   uart.o
+       146         26          0         44          0     118419   system_nuc100series.o
+       224         34         48          0          0       2172   uart.o
 
     ----------------------------------------------------------------------
-      2980        898        328         68       1028     275456   Object Totals
+      2980        898        328         68       1028     275548   Object Totals
          0          0         32          0          0          0   (incl. Generated)
          4          0          0          0          4          0   (incl. Padding)
 
@@ -892,8 +892,8 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      4448        966        328         68       1028     274744   Grand Totals
-      4448        966        328         68       1028     274744   ELF Image Totals
+      4448        966        328         68       1028     274836   Grand Totals
+      4448        966        328         68       1028     274836   ELF Image Totals
       4448        966        328         68          0          0   ROM Totals
 
 ==============================================================================
