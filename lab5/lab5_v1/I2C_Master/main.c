@@ -290,7 +290,7 @@ int32_t I2C0_Read_Write_SLAVE(uint8_t slvaddr)
     return 0;
 }
 
-void ADXL_init(uint8_t slvaddr){
+void ADXL_init(uint8_t slvaddr, uint8_t data){
 	/*-----------------------------*/
 	/*  Initial ADXL345            */
 	/*	POWER_CTL(0x2D): 0x08      */
