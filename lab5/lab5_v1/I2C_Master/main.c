@@ -10,6 +10,9 @@
  * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
  *
  ******************************************************************************/
+
+//i2c page.204
+
 #include <stdio.h>
 #include "NUC100Series.h"
 
@@ -49,6 +52,7 @@ void I2C0_IRQHandler(void)
             s_I2C0HandlerFn(u32Status);
     }
 }
+
 
 /*---------------------------------------------------------------------------------------------------------*/
 /*  I2C Rx Callback Function                                                                               */
@@ -141,6 +145,8 @@ void I2C_MasterTx(uint32_t u32Status)
     }
 }
 
+
+
 void SYS_Init(void)
 {
     /*---------------------------------------------------------------------------------------------------------*/
@@ -228,6 +234,15 @@ void I2C0_Close(void)
 
 }
 
+
+int32_t I2C0_Read_SLAVE(uint8_t slvaddr)
+{
+    g_u8DeviceAddr = slvaddr;
+   
+    return 0;
+}
+
+
 int32_t I2C0_Read_Write_SLAVE(uint8_t slvaddr)
 {
     uint32_t i;
@@ -273,6 +288,27 @@ int32_t I2C0_Read_Write_SLAVE(uint8_t slvaddr)
     }
     printf("Master Access Slave (0x%X) Test OK\n", slvaddr);
     return 0;
+}
+
+void ADXL_init(uint8_t slvaddr){
+	/*-----------------------------*/
+	/*  Initial ADXL345            */
+	/*	POWER_CTL(0x2D): 0x08      */
+	/*	DATA_FORMAT(0x31): 0x0B    */
+	/*	FIFO_CTL(0x38): 0x80       */
+	// ADXL345 address 0x53
+	g_u8DeviceAddr = slvaddr;
+	
+	
+	s_I2C0HandlerFn = (I2C_FUNC)I2C_MasterTx;		/* I2C function to write data to slave */
+	I2C_SET_CONTROL_REG(I2C0, I2C_I2CON_STA);		/* I2C as master sends START signal */
+	while(g_u8MstEndFlag == 0);
+	g_u8MstEndFlag = 0;
+	
+	//register address
+	//data
+	//stop
+	
 }
 /*---------------------------------------------------------------------------------------------------------*/
 /*  Main Function                                                                                          */
