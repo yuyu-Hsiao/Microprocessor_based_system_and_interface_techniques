@@ -11,6 +11,9 @@
 
 
  
+
+
+
 #line 1 "C:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdio.h"
  
  
@@ -910,7 +913,7 @@ extern __declspec(__nothrow) void __use_no_semihosting(void);
 
  
 
-#line 14 "..\\main.c"
+#line 17 "..\\main.c"
 #line 1 "..\\..\\Library\\Device\\Nuvoton\\NUC100Series\\Include\\NUC100Series.h"
  
 
@@ -21981,7 +21984,7 @@ void ACMP_Close(ACMP_T *, uint32_t u32ChNum);
 
 
 
-#line 15 "..\\main.c"
+#line 18 "..\\main.c"
 
 
 
@@ -21995,9 +21998,17 @@ volatile uint8_t g_u8MstRxData;
 volatile uint8_t g_u8MstDataLen;
 volatile uint8_t g_u8MstEndFlag = 0;
 
+volatile uint8_t g_u8MstTxLen = 0; 
+
 typedef void (*I2C_FUNC)(uint32_t u32Status);
 
 static volatile I2C_FUNC s_I2C0HandlerFn = 0;
+
+uint8_t init_adxl1[] = {0x2D, 0x08};
+uint8_t init_adxl2[] = {0x31, 0x0B};
+uint8_t init_adxl3[] = {0x38, 0x80};
+
+uint8_t data_test[] = {0x00};
 
  
  
@@ -22020,6 +22031,7 @@ void I2C0_IRQHandler(void)
     }
 }
 
+
  
  
  
@@ -22041,7 +22053,7 @@ void I2C_MasterRx(uint32_t u32Status)
     }
     else if(u32Status == 0x28)                   
     {
-        if(g_u8MstDataLen != 2)
+        if(g_u8MstDataLen != g_u8MstTxLen)
         {
             ((((I2C_T *) ((( uint32_t)0x40000000) + 0x20000)))->I2CDAT = g_au8MstTxData[g_u8MstDataLen++]);
             ((((I2C_T *) ((( uint32_t)0x40000000) + 0x20000)))->I2CON = ((((I2C_T *) ((( uint32_t)0x40000000) + 0x20000)))->I2CON & ~0x3c) | 0x08UL);
@@ -22093,7 +22105,7 @@ void I2C_MasterTx(uint32_t u32Status)
     }
     else if(u32Status == 0x28)                   
     {
-        if(g_u8MstDataLen != 3)
+        if(g_u8MstDataLen != g_u8MstTxLen)
         {
             ((((I2C_T *) ((( uint32_t)0x40000000) + 0x20000)))->I2CDAT = g_au8MstTxData[g_u8MstDataLen++]);
             ((((I2C_T *) ((( uint32_t)0x40000000) + 0x20000)))->I2CON = ((((I2C_T *) ((( uint32_t)0x40000000) + 0x20000)))->I2CON & ~0x3c) | 0x08UL);
@@ -22110,6 +22122,8 @@ void I2C_MasterTx(uint32_t u32Status)
         printf("Status 0x%x is NOT processed\n", u32Status);
     }
 }
+
+
 
 void SYS_Init(void)
 {
@@ -22176,10 +22190,10 @@ void I2C0_Init(void)
     printf("I2C clock %d Hz\n", I2C_GetBusClockFreq(((I2C_T *) ((( uint32_t)0x40000000) + 0x20000))));
 
      
-    I2C_SetSlaveAddr(((I2C_T *) ((( uint32_t)0x40000000) + 0x20000)), 0, 0x15, 0);    
-    I2C_SetSlaveAddr(((I2C_T *) ((( uint32_t)0x40000000) + 0x20000)), 1, 0x35, 0);    
-    I2C_SetSlaveAddr(((I2C_T *) ((( uint32_t)0x40000000) + 0x20000)), 2, 0x55, 0);    
-    I2C_SetSlaveAddr(((I2C_T *) ((( uint32_t)0x40000000) + 0x20000)), 3, 0x75, 0);    
+    
+    
+    
+    
 
      
     I2C_EnableInt(((I2C_T *) ((( uint32_t)0x40000000) + 0x20000)));
@@ -22195,60 +22209,70 @@ void I2C0_Close(void)
      
     I2C_Close(((I2C_T *) ((( uint32_t)0x40000000) + 0x20000)));
     CLK_DisableModuleClock(((((1) & 0x03) << 30)|(((8) & 0x1f) << 0) | (((0x0) & 0x03) << 28)|(((0x0) & 0x07) << 25)|(((0x0) & 0x1f) << 20)| (((0x0) & 0x03) << 18)|(((0x0) & 0xff) << 10)|(((0x0) & 0x1f) << 5)));
-
 }
 
-int32_t I2C0_Read_Write_SLAVE(uint8_t slvaddr)
-{
-    uint32_t i;
 
-    g_u8DeviceAddr = slvaddr;
 
-    for(i = 0; i < 0x100; i++)
-    {
-        g_au8MstTxData[0] = (uint8_t)((i & 0xFF00) >> 8);
-        g_au8MstTxData[1] = (uint8_t)(i & 0x00FF);
-        g_au8MstTxData[2] = (uint8_t)(g_au8MstTxData[1] + 3);
+void ADXL_WriteBytes(uint8_t slvaddr, uint8_t *data, uint8_t length) {
+		uint8_t i;
+    g_u8DeviceAddr = slvaddr;           
+    g_u8MstTxLen = length;               
 
-        g_u8MstDataLen = 0;
-        g_u8MstEndFlag = 0;
-
-         
-        s_I2C0HandlerFn = (I2C_FUNC)I2C_MasterTx;
-
-         
-        ((((I2C_T *) ((( uint32_t)0x40000000) + 0x20000)))->I2CON = ((((I2C_T *) ((( uint32_t)0x40000000) + 0x20000)))->I2CON & ~0x3c) | 0x20UL);
-
-         
-        while(g_u8MstEndFlag == 0);
-        g_u8MstEndFlag = 0;
-
-         
-        s_I2C0HandlerFn = (I2C_FUNC)I2C_MasterRx;
-
-        g_u8MstDataLen = 0;
-        g_u8DeviceAddr = slvaddr;
-
-        ((((I2C_T *) ((( uint32_t)0x40000000) + 0x20000)))->I2CON = ((((I2C_T *) ((( uint32_t)0x40000000) + 0x20000)))->I2CON & ~0x3c) | 0x20UL);
-
-         
-        while(g_u8MstEndFlag == 0);
-
-         
-        if(g_u8MstRxData != g_au8MstTxData[2])
-        {
-            printf("I2C Byte Write/Read Failed, Data 0x%x\n", g_u8MstRxData);
-            return -1;
-        }
+    for(i = 0; i < length; i++) {
+        g_au8MstTxData[i] = data[i];     
     }
-    printf("Master Access Slave (0x%X) Test OK\n", slvaddr);
-    return 0;
+
+    g_u8MstDataLen = 0;
+    g_u8MstEndFlag = 0;
+
+    s_I2C0HandlerFn = I2C_MasterTx;
+
+    ((((I2C_T *) ((( uint32_t)0x40000000) + 0x20000)))->I2CON = ((((I2C_T *) ((( uint32_t)0x40000000) + 0x20000)))->I2CON & ~0x3c) | 0x20UL);
+
+    while(g_u8MstEndFlag == 0);
+}
+
+uint8_t ADXL_ReadBytes(uint8_t slvaddr, uint8_t *data, uint8_t length) {
+		uint8_t i;
+		uint8_t read_data;
+    g_u8DeviceAddr = slvaddr;           
+    g_u8MstTxLen = length;               
+
+    for(i = 0; i < length; i++) {
+        g_au8MstTxData[i] = data[i];     
+    }
+
+    g_u8MstDataLen = 0;
+    g_u8MstEndFlag = 0;
+
+    s_I2C0HandlerFn = I2C_MasterRx;
+
+    ((((I2C_T *) ((( uint32_t)0x40000000) + 0x20000)))->I2CON = ((((I2C_T *) ((( uint32_t)0x40000000) + 0x20000)))->I2CON & ~0x3c) | 0x20UL);
+
+    while(g_u8MstEndFlag == 0);
+		read_data = g_u8MstRxData;
+		
+		return read_data;
+}
+
+void ADXL_init(void){
+	 
+	 
+	 
+	 
+	 
+	
+	ADXL_WriteBytes(0x53, init_adxl1, 2);
+	ADXL_WriteBytes(0x53, init_adxl2, 2);
+	ADXL_WriteBytes(0x53, init_adxl3, 2);	
 }
  
  
  
 int32_t main(void)
 {
+		uint8_t test;
+	
      
     SYS_UnlockReg();
 
@@ -22260,6 +22284,8 @@ int32_t main(void)
 
      
     SYS_LockReg();
+	
+		
 
     
 
@@ -22279,28 +22305,16 @@ int32_t main(void)
      
     I2C0_Init();
 
-    printf("\n");
-    printf("Check I2C Slave(I2C0) is running first!\n");
-    printf("Press any key to continue.\n");
-    getc((& __stdin));
+		ADXL_init();
+		
+		while(1){
+			test=ADXL_ReadBytes(0x53,data_test,1);
+			printf("test = 0x%02X\n", test);
+		}
 
-     
-    printf("\n");
-    printf(" == No Mask Address ==\n");
-    I2C0_Read_Write_SLAVE(0x15);
-    I2C0_Read_Write_SLAVE(0x35);
-    I2C0_Read_Write_SLAVE(0x55);
-    I2C0_Read_Write_SLAVE(0x75);
-    printf("SLAVE Address test OK.\n");
-
-     
-    printf("\n");
-    printf(" == Mask Address ==\n");
-    I2C0_Read_Write_SLAVE(0x15 & ~0x01);
-    I2C0_Read_Write_SLAVE(0x35 & ~0x04);
-    I2C0_Read_Write_SLAVE(0x55 & ~0x01);
-    I2C0_Read_Write_SLAVE(0x75 & ~0x04);
-    printf("SLAVE Address Mask test OK.\n");
+		
+		
+		
 
     s_I2C0HandlerFn = 0;
 
