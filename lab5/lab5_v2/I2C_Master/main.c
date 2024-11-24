@@ -290,20 +290,28 @@ void ADXL_init(void){
 	ADXL_WriteBytes(0x53, init_adxl3, 2);	
 }
 
-
+int8_t my_round(float number){
+    return (number >= 0) ? (int)(number + 0.5f) : (int)(number - 0.5f);
+}
 
 void ADXL_calibrate(void){
     int16_t X_avg = 0, Y_avg = 0, Z_avg = 0;
 		int16_t x, y, z;
     int8_t x_offset, y_offset, z_offset;
+		uint8_t i;
+	
+		uint8_t data1[2];
+		uint8_t data2[2];
+		uint8_t data3[2];
+	
 
-    // ??????????,? Z ???(+1 g)
-    // ?? 10 ????????
-    for(int i = 0; i < 10; i++){
+    for(i = 0; i < 10; i++){
 
 				x = (ADXL_ReadBytes(0x53,0x33)<<8)|ADXL_ReadBytes(0x53,0x32);
 				y = (ADXL_ReadBytes(0x53,0x35)<<8)|ADXL_ReadBytes(0x53,0x34);
 				z = (ADXL_ReadBytes(0x53,0x37)<<8)|ADXL_ReadBytes(0x53,0x36);
+			
+				printf("XYZ: X=%d, Y=%d, Z=%d\n\n", x, y, z);
 
         X_avg += x;
         Y_avg += y;
@@ -315,18 +323,36 @@ void ADXL_calibrate(void){
     X_avg /= 10;
     Y_avg /= 10;
     Z_avg /= 10;
+		
+		printf("XYZ_avg: X=%d, Y=%d, Z=%d\n\n", X_avg, Y_avg, Z_avg);
+		
+		CLK_SysTickDelay(5000000);  // 1s
 
     // ?????
-    x_offset = -round((float)X_avg / 4.0f);
-    y_offset = -round((float)Y_avg / 4.0f);
-    z_offset = -round(((float)(Z_avg - 32) /* ???? +1g,?? 32 LSB */ ) / 4.0f);
+    x_offset = -my_round((float)X_avg / 4.0f);
+    y_offset = -my_round((float)Y_avg / 4.0f);
+    z_offset = -my_round(((float)(Z_avg - 256)) / 4.0f);
+    //x_offset = -((float)X_avg / 4.0f);
+    //y_offset = -((float)Y_avg / 4.0f);
+    //z_offset = -(((float)(Z_avg - 32)) / 4.0f);
 
-    // ???????????
-    ADXL_write(0x1E, (uint8_t)x_offset);
-    ADXL_write(0x1F, (uint8_t)y_offset);
-    ADXL_write(0x20, (uint8_t)z_offset);
+		data1[0] = 0x1E;
+		data1[1] = (uint8_t)x_offset;
 
-    printf("Calibration offsets written: X=%d, Y=%d, Z=%d\n", x_offset, y_offset, z_offset);
+		data2[0] = 0x1F;
+		data2[1] = (uint8_t)y_offset;
+
+		data3[0] = 0x20;
+		data3[1] = (uint8_t)z_offset;
+
+    ADXL_WriteBytes(0x53, data1, 2);
+    ADXL_WriteBytes(0x53, data2, 2);
+    ADXL_WriteBytes(0x53, data3, 2);
+
+    printf("Calibration offsets written: X=%d, Y=%d, Z=%d\n\n", x_offset, y_offset, z_offset);
+		
+		CLK_SysTickDelay(5000000);  // 1s
+		
 }
 /*---------------------------------------------------------------------------------------------------------*/
 /*  Main Function                                                                                          */
@@ -374,13 +400,12 @@ int32_t main(void)
 		ADXL_init();
 		
 		device_num=ADXL_ReadBytes(0x53,0x00);
-		printf("\ndevice: 0x%02X\n", device_num);
+		printf("\ndevice: 0x%02X\n\n", device_num);
 		
-		while(1){
-
-			
-			
-			
+		
+		ADXL_calibrate();
+		
+		while(1){			
 			/*-------------------------------*/
 			/*  ADXL data register           */
 			/*	DATAX0(0x32), DATAX1(0x33)   */
@@ -392,24 +417,15 @@ int32_t main(void)
 			rd_zaxis = (ADXL_ReadBytes(0x53,0x37)<<8)|ADXL_ReadBytes(0x53,0x36);
 			
 
-			offset = ADXL_ReadBytes(0x53,0x1E);
-			cd_xaxis = (float)(rd_xaxis - offset) / (256 - offset);
-			
-			
-			offset = ADXL_ReadBytes(0x53,0x1F);
-			cd_yaxis = (float)(rd_yaxis - offset) / (256 - offset);
-			
-			offset = ADXL_ReadBytes(0x53,0x20);
-			cd_zaxis = (float)(rd_zaxis - offset) / (256 - offset);
+			cd_xaxis = (float)rd_xaxis / 256.0;
+			cd_yaxis = (float)rd_yaxis / 256.0;
+			cd_zaxis = (float)rd_zaxis / 256.0;
 
-			//printf("x: %.2f, y: %.2f, z: %.2f\n", cd_xaxis, cd_yaxis, cd_zaxis);
+			printf("x: %.2f, y: %.2f, z: %.2f\n", cd_xaxis, cd_yaxis, cd_zaxis);
 			
 			CLK_SysTickDelay(500000);  //delay 500ms
 		}
 
-		
-		
-		
 
     s_I2C0HandlerFn = NULL;
 

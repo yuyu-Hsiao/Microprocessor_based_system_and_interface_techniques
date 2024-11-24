@@ -26,3 +26,4 @@
 .\obj\main.o: ..\..\Library\StdDriver\inc\PS2.h
 .\obj\main.o: ..\..\Library\StdDriver\inc\CLK.h
 .\obj\main.o: ..\..\Library\StdDriver\inc\ACMP.h
+.\obj\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
