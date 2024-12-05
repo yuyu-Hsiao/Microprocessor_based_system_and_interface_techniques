@@ -10,6 +10,7 @@
       <TargetName>TIMER_PeriodicINT</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
+      <pCCUsed>5060528::V5.06 update 5 (build 528)::ARMCC</pCCUsed>
       <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -374,7 +375,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\Library\CMSIS\Include;..\..\..\..\Library\Device\Nuvoton\NUC100Series\Include;..\..\..\..\Library\StdDriver\inc</IncludePath>
+              <IncludePath>..\..\Library\CMSIS\Include;..\..\Library\Device\Nuvoton\NUC100Series\Include;..\..\Library\StdDriver\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -421,12 +422,12 @@
             <File>
               <FileName>system_NUC100Series.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Library\Device\Nuvoton\NUC100Series\Source\system_NUC100Series.c</FilePath>
+              <FilePath>..\..\Library\Device\Nuvoton\NUC100Series\Source\system_NUC100Series.c</FilePath>
             </File>
             <File>
               <FileName>startup_NUC100Series.s</FileName>
               <FileType>2</FileType>
-              <FilePath>..\..\..\..\Library\Device\Nuvoton\NUC100Series\Source\ARM\startup_NUC100Series.s</FilePath>
+              <FilePath>..\..\Library\Device\Nuvoton\NUC100Series\Source\ARM\startup_NUC100Series.s</FilePath>
             </File>
           </Files>
         </Group>
@@ -446,27 +447,27 @@
             <File>
               <FileName>retarget.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Library\StdDriver\src\retarget.c</FilePath>
+              <FilePath>..\..\Library\StdDriver\src\retarget.c</FilePath>
             </File>
             <File>
               <FileName>sys.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Library\StdDriver\src\sys.c</FilePath>
+              <FilePath>..\..\Library\StdDriver\src\sys.c</FilePath>
             </File>
             <File>
               <FileName>clk.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Library\StdDriver\src\clk.c</FilePath>
+              <FilePath>..\..\Library\StdDriver\src\clk.c</FilePath>
             </File>
             <File>
               <FileName>uart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Library\StdDriver\src\uart.c</FilePath>
+              <FilePath>..\..\Library\StdDriver\src\uart.c</FilePath>
             </File>
             <File>
               <FileName>timer.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Library\StdDriver\src\timer.c</FilePath>
+              <FilePath>..\..\Library\StdDriver\src\timer.c</FilePath>
             </File>
           </Files>
         </Group>
