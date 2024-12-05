@@ -20,6 +20,7 @@ volatile uint16_t key_output[3] = {0x003B, 0x003D, 0X003E};
 volatile uint16_t key_temp=0x0000;
 uint16_t key_value = 3;
 uint8_t key_detected = 0;
+volatile uint32_t counter[2] ={0,0};
 
 
 
@@ -29,28 +30,33 @@ void OpenKeyPad(void)
 	PA -> PMD = (PA -> PMD & 0xFFFFF000)|0x0FD5; 	//PA0-2 output PA3-5 input
 }
 
-
-uint8_t ScanKey(void)
+//uint16_t ScanKey1(void)
+void ScanKey1(void)
 {
+	PA->DOUT = (PA->DOUT & 0xFFC0)|key_output[counter[1]];
 	
-  PA0=1; PA1=1; PA2=0; PA3=1; PA4=1; PA5=1;
-	CLK_SysTickDelay(10);
-	if (PA3==0) return 1;
-	if (PA4==0) return 4;
-	if (PA5==0) return 7;
-  
-	PA0=1; PA1=0; PA2=1; PA3=1; PA4=1; PA5=1;
-	CLK_SysTickDelay(10);
-	if (PA3==0) return 2;
-	if (PA4==0) return 5;
-	if (PA5==0) return 8;
+	if ((PA->PIN & (1 << 3)) == 0){
+		key_value = 1+counter[1];
+		key_detected = 1;
+	} 
+	if ((PA->PIN & (1 << 4)) == 0){
+		key_value = 4+counter[1];
+		key_detected = 1;
+	} 
+	if ((PA->PIN & (1 << 5)) == 0){
+		key_value = 7+counter[1];
+		key_detected = 1;
+	} 
+
 	
-	PA0=0; PA1=1; PA2=1; PA3=1; PA4=1; PA5=1;
-	CLK_SysTickDelay(10);
-	if (PA3==0) return 3;
-	if (PA4==0) return 6;
-	if (PA5==0) return 9;
-	return 0;
+	counter[1]++;
+	if(counter[1]>2){
+		counter[1]=0;
+		if (!key_detected) {
+			key_value = 0;
+		}
+		key_detected = 0;
+	}
 }
 
 /**
