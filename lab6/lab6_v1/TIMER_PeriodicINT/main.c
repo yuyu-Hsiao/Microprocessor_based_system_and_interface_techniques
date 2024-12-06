@@ -164,6 +164,8 @@ int main(void)
     printf("# Key1 press: stop counter1; release: resume counter1.\n");
 		printf("# Key2 press: stop counter2; release: resume counter2.\n");
 		printf("# Key3 reset all counter.\n");
+		printf("# Key4 start/stop counter1.\n");
+		printf("# Key5 start/stop counter2.\n");
 
     /* Open Timer0 in periodic mode, enable interrupt and 1 interrupt tick per second */
     TIMER_Open(TIMER0, TIMER_PERIODIC_MODE, 1000);
