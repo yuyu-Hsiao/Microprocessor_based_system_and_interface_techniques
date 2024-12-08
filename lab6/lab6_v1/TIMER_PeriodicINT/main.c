@@ -138,7 +138,8 @@ void UART0_Init(void)
 int main(void)
 {
     volatile uint32_t u32InitCount;
-		uint32_t prev_key_value = 0; 
+		uint32_t prev_key_value_4 = 0; 
+    uint32_t prev_key_value_5 = 0; 
 		uint32_t current_key_value = 0; 
 		uint32_t counter1_flag = TRUE;
 		uint32_t counter2_flag = TRUE;
@@ -201,28 +202,38 @@ int main(void)
 					u32InitCount=0;
 				}
 
+
+        /*------------------------- start/stop counter -------------------------*/
         current_key_value = key_value;
-				if(key_value ==4){
-					prev_key_value = key_value;
-				}
-        if (prev_key_value == 4 && current_key_value == 0) {
+        //key4
+        if (prev_key_value_4 == 4 && current_key_value == 0) {
 					counter1_flag = !counter1_flag;
-					prev_key_value =0;
-        }				
-				
-				if(key_value ==5){
-					prev_key_value = key_value;
+					prev_key_value_4 =0;
+        }
+        else if(key_value ==4){
+					prev_key_value_4 = key_value;
 				}
-        if (prev_key_value == 5 && current_key_value == 0) {
+
+        //key5
+        if (prev_key_value_5 == 5 && current_key_value == 0) {
 					counter2_flag = !counter2_flag;
-					prev_key_value =0;
+					prev_key_value_5 =0;
         }	
-				
-				//reset counter
+				else if(key_value ==5){
+					prev_key_value_5 = key_value;
+				}
+        /*----------------------------------------------------------------------*/
+
+        
+
+				/*------------------------- key3 reset counter -------------------------*/
 				if(key_value==3){
 					g_au32TMRINTCount[0] = 0;
 					g_au32TMRINTCount[1] = 0;
 				}
+        /*----------------------------------------------------------------------*/
+
+
 				ScanKey1();		
 				timer_f = FALSE;			
 			}			
