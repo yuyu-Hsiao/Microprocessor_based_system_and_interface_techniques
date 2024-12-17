@@ -132,7 +132,6 @@ void SYS_Init(void)
     CLK_EnableModuleClock(TMR0_MODULE);    
     CLK_EnableModuleClock(TMR1_MODULE);     
    
-
     /* Select Timer 0~3 module clock source */
     CLK_SetModuleClock(TMR0_MODULE, CLK_CLKSEL1_TMR0_S_HXT, NULL);
     CLK_SetModuleClock(TMR1_MODULE, CLK_CLKSEL1_TMR0_S_HXT, NULL);
@@ -198,8 +197,6 @@ int main(void){
     /* Open Timer1 in periodic mode, enable interrupt and 2 interrupt ticks per second */
     TIMER_Open(TIMER1, TIMER_PERIODIC_MODE, 3);
     TIMER_EnableInt(TIMER1);
-
-
 
     /* Enable Timer0 ~ Timer3 NVIC */
     NVIC_EnableIRQ(TMR0_IRQn);
