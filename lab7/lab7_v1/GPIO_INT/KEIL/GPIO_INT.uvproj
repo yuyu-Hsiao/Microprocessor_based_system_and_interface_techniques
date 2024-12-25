@@ -10,6 +10,7 @@
       <TargetName>GPIO_INT</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
+      <pCCUsed>5060528::V5.06 update 5 (build 528)::ARMCC</pCCUsed>
       <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -374,7 +375,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\Library\Device\Nuvoton\NUC100Series\Include;..\..\..\..\Library\CMSIS\Include;..\..\..\..\Library\StdDriver\inc</IncludePath>
+              <IncludePath>..\..\Library\Device\Nuvoton\NUC100Series\Include;..\..\Library\CMSIS\Include;..\..\Library\StdDriver\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>

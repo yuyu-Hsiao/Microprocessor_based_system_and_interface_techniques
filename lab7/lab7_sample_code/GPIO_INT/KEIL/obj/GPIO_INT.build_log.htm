@@ -1,0 +1,71 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: £gVision V5.24.2.0
+Copyright (C) 2017 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: YuYu Hsiao, CCU, LIC=----
+ 
+Tool Versions:
+Toolchain:       MDK-Lite  Version: 5.24.1
+Toolchain Path:  C:\Keil_v5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 5 (build 528)
+Assembler:       Armasm.exe V5.06 update 5 (build 528)
+Linker/Locator:  ArmLink.exe V5.06 update 5 (build 528)
+Library Manager: ArmAr.exe V5.06 update 5 (build 528)
+Hex Converter:   FromElf.exe V5.06 update 5 (build 528)
+CPU DLL:         SARMCM3.DLL V5.24.1
+Dialog DLL:      DARMCM1.DLL V1.18.0.0
+Target DLL:      Nu_Link.dll V3.07
+Dialog DLL:      TARMCM1.DLL V1.13.0.0
+ 
+<h2>Project:</h2>
+C:\Users\yuyu\Desktop\GitHub\Microprocessor_based_system_and_interface_techniques\lab7\lab7_sample_code\GPIO_INT\KEIL\GPIO_INT.uvproj
+Project File Date:  12/12/2024
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 5 (build 528)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
+Rebuild target 'GPIO_INT'
+creating preprocessor file for system_NUC100Series.c...
+assembling startup_NUC100Series.s...
+compiling system_NUC100Series.c...
+..\..\Library\Device\Nuvoton\NUC100Series\Source\system_NUC100Series.c(13): error:  #5: cannot open source input file "NUC100Series.h": No such file or directory
+  #include "NUC100Series.h"
+..\..\Library\Device\Nuvoton\NUC100Series\Source\system_NUC100Series.c: 0 warnings, 1 error
+creating preprocessor file for main.c...
+compiling main.c...
+..\main.c(11): error:  #5: cannot open source input file "NUC100Series.h": No such file or directory
+  #include "NUC100Series.h"
+..\main.c: 0 warnings, 1 error
+creating preprocessor file for retarget.c...
+creating preprocessor file for gpio.c...
+compiling retarget.c...
+..\..\Library\StdDriver\src\retarget.c(15): error:  #5: cannot open source input file "NUC100Series.h": No such file or directory
+  #include "NUC100Series.h"
+..\..\Library\StdDriver\src\retarget.c: 0 warnings, 1 error
+compiling gpio.c...
+..\..\Library\StdDriver\src\gpio.c(12): error:  #5: cannot open source input file "NUC100Series.h": No such file or directory
+  #include "NUC100Series.h"
+..\..\Library\StdDriver\src\gpio.c: 0 warnings, 1 error
+creating preprocessor file for clk.c...
+compiling clk.c...
+..\..\Library\StdDriver\src\clk.c(12): error:  #5: cannot open source input file "NUC100Series.h": No such file or directory
+  #include "NUC100Series.h"
+..\..\Library\StdDriver\src\clk.c: 0 warnings, 1 error
+creating preprocessor file for sys.c...
+creating preprocessor file for uart.c...
+compiling sys.c...
+..\..\Library\StdDriver\src\sys.c(12): error:  #5: cannot open source input file "NUC100Series.h": No such file or directory
+  #include "NUC100Series.h"
+..\..\Library\StdDriver\src\sys.c: 0 warnings, 1 error
+compiling uart.c...
+..\..\Library\StdDriver\src\uart.c(13): error:  #5: cannot open source input file "NUC100Series.h": No such file or directory
+  #include "NUC100Series.h"
+..\..\Library\StdDriver\src\uart.c: 0 warnings, 1 error
+".\obj\GPIO_INT.axf" - 7 Error(s), 0 Warning(s).
+Target not created.
+Build Time Elapsed:  00:00:02
+</pre>
+</body>
+</html>

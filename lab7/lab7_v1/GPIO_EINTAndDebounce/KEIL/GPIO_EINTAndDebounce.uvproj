@@ -374,7 +374,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\Library\Device\Nuvoton\NUC100Series\Include;..\..\..\..\Library\CMSIS\Include;..\..\..\..\Library\StdDriver\inc</IncludePath>
+              <IncludePath>..\..\Library\Device\Nuvoton\NUC100Series\Include;..\..\Library\CMSIS\Include;..\..\Library\StdDriver\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>

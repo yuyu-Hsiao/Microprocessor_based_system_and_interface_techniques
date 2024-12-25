@@ -23,15 +23,30 @@
  *
  * @details     The PA/PB default IRQ, declared in startup_NUC100Series.s.
  */
+volatile uint8_t lab7_statue = TRUE;
+ 
+ void OpenKeyPad(void)
+{
+  GPIO_SetMode(PA, BIT0, GPIO_PMD_QUASI);
+  GPIO_SetMode(PA, BIT1, GPIO_PMD_QUASI);
+  GPIO_SetMode(PA, BIT2, GPIO_PMD_QUASI);
+  GPIO_SetMode(PA, BIT3, GPIO_PMD_QUASI);
+  GPIO_SetMode(PA, BIT4, GPIO_PMD_QUASI);
+  GPIO_SetMode(PA, BIT5, GPIO_PMD_QUASI);
+	PA0=1; PA1=1; PA2=0; PA3=1; PA4=1; PA5=1;	
+}
+
+ 
 void GPAB_IRQHandler(void)
 {
     /* To check if PB.3 interrupt occurred */
 
-    if(GPIO_GET_INT_FLAG(PB, BIT3))
+    if(GPIO_GET_INT_FLAG(PA, BIT3))
     {
-        GPIO_CLR_INT_FLAG(PB, BIT3);
-        printf("PB.3 INT occurred.\n");
-    }
+        GPIO_CLR_INT_FLAG(PA, BIT3);
+				lab7_statue = !lab7_statue;
+        printf("change!!!\n");
+    }		
     else
     {
         /* Un-expected interrupt. Just clear all PA, PB interrupts */
@@ -41,33 +56,6 @@ void GPAB_IRQHandler(void)
     }
 }
 
-/**
- * @brief       GPIO PC/PD/PE/PF IRQ
- *
- * @param       None
- *
- * @return      None
- *
- * @details     The PC/PD/PE/PF default IRQ, declared in startup_NUC100Series.s.
- */
-void GPCDEF_IRQHandler(void)
-{
-    /* To check if PE.5 interrupt occurred */
-    if(GPIO_GET_INT_FLAG(PE, BIT5))
-    {
-        GPIO_CLR_INT_FLAG(PE, BIT5);
-        printf("PE.5 INT occurred.\n");
-    }
-    else
-    {
-        /* Un-expected interrupt. Just clear all PC, PD, PE and PF interrupts */
-        PC->ISRC = PC->ISRC;
-        PD->ISRC = PD->ISRC;
-        PE->ISRC = PE->ISRC;
-        PF->ISRC = PF->ISRC;
-        printf("Un-expected interrupts.\n");
-    }
-}
 
 void SYS_Init(void)
 {
@@ -137,29 +125,34 @@ int main(void)
 
     /* Init UART0 for printf */
     UART0_Init();
+		
+		OpenKeyPad();
 
     printf("\n\nCPU @ %d Hz\n", SystemCoreClock);
     printf("+------------------------------------------------+\n");
-    printf("|    GPIO PB.3 and PE.5 Interrupt Sample Code    |\n");
+    printf("|                   start lab5                   |\n");
     printf("+------------------------------------------------+\n\n");
 
-    /*-----------------------------------------------------------------------------------------------------*/
-    /* GPIO Interrupt Function Test                                                                        */
-    /*-----------------------------------------------------------------------------------------------------*/
-    printf("PB.3 and PE.5 are used to test interrupt ......\n");
 
-    /* Configure PB.3 as Input mode and enable interrupt by rising edge trigger */
-    GPIO_SetMode(PB, BIT3, GPIO_PMD_INPUT);
-    GPIO_EnableInt(PB, 3, GPIO_INT_RISING);
+    //GPIO_EnableInt(PA, 3, GPIO_INT_RISING);
+		GPIO_EnableInt(PA, 3, GPIO_INT_FALLING);
     NVIC_EnableIRQ(GPAB_IRQn);
-
-    /*  Configure PE.5 as Quasi-bidirection mode and enable interrupt by falling edge trigger */
-    GPIO_SetMode(PE, BIT5, GPIO_PMD_QUASI);
-    GPIO_EnableInt(PE, 5, GPIO_INT_FALLING);
-    NVIC_EnableIRQ(GPCDEF_IRQn);
+		
+		GPIO_SET_DEBOUNCE_TIME(GPIO_DBCLKSRC_LIRC, GPIO_DBCLKSEL_1024);
+		GPIO_ENABLE_DEBOUNCE(PA, BIT3 | BIT4 | BIT5);
 
     /* Waiting for interrupts */
-    while(1);
+    while(1){
+			if(lab7_statue){
+				printf("safe!\n");
+			}
+			else{
+				printf("Alarm!\n");
+			}
+			CLK_SysTickDelay(100000);
+		
+		}
+
 }
 
 /*** (C) COPYRIGHT 2013 Nuvoton Technology Corp. ***/
