@@ -23,7 +23,7 @@
  *
  * @details     The PA/PB default IRQ, declared in startup_NUC100Series.s.
  */
-volatile uint8_t lab7_statue = TRUE;
+volatile uint8_t GPIO_statue = TRUE;
  
  void OpenKeyPad(void)
 {
@@ -44,7 +44,7 @@ void GPAB_IRQHandler(void)
     if(GPIO_GET_INT_FLAG(PA, BIT3))
     {
         GPIO_CLR_INT_FLAG(PA, BIT3);
-				lab7_statue = !lab7_statue;
+				GPIO_statue = !GPIO_statue;
         printf("change!!!\n");
     }		
     else
@@ -53,6 +53,26 @@ void GPAB_IRQHandler(void)
         PA->ISRC = PA->ISRC;
         PB->ISRC = PB->ISRC;
         printf("Un-expected interrupts.\n");
+    }
+}
+
+
+void WDT_IRQHandler(void)
+{
+    if(WDT_GET_TIMEOUT_INT_FLAG() == 1)
+    {
+        /* Clear WDT time-out interrupt flag */
+        WDT_CLEAR_TIMEOUT_INT_FLAG();
+			
+				printf("WDT time-out interrupt occurred.\n");
+				if(GPIO_statue){
+					WDT_RESET_COUNTER();
+					printf("No problem!!!\n");
+				}
+				else{
+					printf("Alarm!!!!~~~reset\n");
+				}
+		        
     }
 }
 
@@ -140,16 +160,31 @@ int main(void)
 		
 		GPIO_SET_DEBOUNCE_TIME(GPIO_DBCLKSRC_LIRC, GPIO_DBCLKSEL_1024);
 		GPIO_ENABLE_DEBOUNCE(PA, BIT3 | BIT4 | BIT5);
+		
+		
+		/*------------------------------------------------------------------------------------------------*/
+    /* Because of all bits can be written in WDT Control Register are write-protected;
+       To program it needs to disable register protection first. */
+    SYS_UnlockReg();
 
+		
+    /* Enable WDT time-out reset function and select time-out interval to 2^14 * WDT clock then start WDT counting */
+    WDT_Open(WDT_TIMEOUT_2POW14, WDT_RESET_DELAY_1026CLK, TRUE, FALSE); 
+		
+    WDT_EnableInt();						/* Enable WDT interrupt function */    
+    NVIC_EnableIRQ(WDT_IRQn);		/* Enable WDT NVIC */
+		/*------------------------------------------------------------------------------------------------*/
+		
+		
     /* Waiting for interrupts */
     while(1){
-			if(lab7_statue){
-				printf("safe!\n");
+			if(GPIO_statue){
+				printf("Safe!\n");
 			}
 			else{
 				printf("Alarm!\n");
 			}
-			CLK_SysTickDelay(100000);
+			CLK_SysTickDelay(1000000);  // 1s
 		
 		}
 

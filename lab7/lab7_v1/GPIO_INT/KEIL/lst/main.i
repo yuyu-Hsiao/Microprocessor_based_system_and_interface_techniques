@@ -21993,7 +21993,8 @@ void ACMP_Close(ACMP_T *, uint32_t u32ChNum);
 
 
  
-volatile uint8_t lab7_statue = 1;
+volatile uint8_t GPIO_statue = 1;
+volatile uint8_t g_u8IsWDTTimeoutINT = 0;
  
  void OpenKeyPad(void)
 {
@@ -22014,8 +22015,8 @@ void GPAB_IRQHandler(void)
     if(((((GPIO_T *) (((( uint32_t)0x50000000) + 0x4000) )))->ISRC & (0x00000008)))
     {
         ((((GPIO_T *) (((( uint32_t)0x50000000) + 0x4000) )))->ISRC = (0x00000008));
-				lab7_statue = !lab7_statue;
-        printf("PA.3 INT occurred.\n");
+				GPIO_statue = !GPIO_statue;
+        printf("change!!!\n");
     }		
     else
     {
@@ -22023,6 +22024,26 @@ void GPAB_IRQHandler(void)
         ((GPIO_T *) (((( uint32_t)0x50000000) + 0x4000) ))->ISRC = ((GPIO_T *) (((( uint32_t)0x50000000) + 0x4000) ))->ISRC;
         ((GPIO_T *) (((( uint32_t)0x50000000) + 0x4000) + 0x0040))->ISRC = ((GPIO_T *) (((( uint32_t)0x50000000) + 0x4000) + 0x0040))->ISRC;
         printf("Un-expected interrupts.\n");
+    }
+}
+
+
+void WDT_IRQHandler(void)
+{
+    if(((((WDT_T *) ((( uint32_t)0x40000000) + 0x4000))->WTCR & (1ul << 3))? 1 : 0) == 1)
+    {
+         
+        (((WDT_T *) ((( uint32_t)0x40000000) + 0x4000))->WTCR = (((WDT_T *) ((( uint32_t)0x40000000) + 0x4000))->WTCR & ~((1ul << 2) | (1ul << 5))) | (1ul << 3));
+			
+				printf("WDT time-out interrupt occurred.\n");
+				if(GPIO_statue){
+					(((WDT_T *) ((( uint32_t)0x40000000) + 0x4000))->WTCR = (((WDT_T *) ((( uint32_t)0x40000000) + 0x4000))->WTCR & ~((1ul << 3) | (1ul << 5) | (1ul << 2))) | (1ul << 0));
+					printf("No problem!!!\n");
+				}
+				else{
+					printf("Alarm!!!!~~~reset\n");
+				}
+		        
     }
 }
 
@@ -22110,16 +22131,31 @@ int main(void)
 		
 		(((GPIO_DBNCECON_T *) (((( uint32_t)0x50000000) + 0x4000) + 0x0180))->DBNCECON = ((1ul << 5) | (0x00000010UL) | (0x0000000AUL)));
 		((((GPIO_T *) (((( uint32_t)0x50000000) + 0x4000) )))->DBEN |= (0x00000008 | 0x00000010 | 0x00000020));
+		
+		
+		 
+    
+ 
+    SYS_UnlockReg();
 
+		
+     
+    WDT_Open((5UL << 8), (0UL << 0), 1, 0); 
+		
+    WDT_EnableInt();						     
+    NVIC_EnableIRQ(WDT_IRQn);		 
+		 
+		
+		
      
     while(1){
-			if(lab7_statue){
+			if(GPIO_statue){
 				printf("safe!\n");
 			}
 			else{
 				printf("Alarm!\n");
 			}
-			CLK_SysTickDelay(100000);
+			CLK_SysTickDelay(1000000);  
 		
 		}
 

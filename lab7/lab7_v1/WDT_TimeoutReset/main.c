@@ -37,7 +37,6 @@ void WDT_IRQHandler(void)
     {
         /* Clear WDT time-out interrupt flag */
         WDT_CLEAR_TIMEOUT_INT_FLAG();
-
         g_u8IsWDTTimeoutINT = 1;
 
         printf("WDT time-out interrupt occurred.\n");
