@@ -313,7 +313,8 @@ void run_train_data()
     float accuracy = 0;
     printf("Train result:\n");
     for( p = 0 ; p < train_data_num ; p++ )
-    { 
+    {
+        /*train data 是哪一類(target value) */ 
         max = 0;
         for (i = 1; i < target_num; i++) 
         {
@@ -347,6 +348,7 @@ void run_train_data()
             Output[i] = 1.0/(1.0 + exp(-Accum)) ; 
         }
         
+        /* 找出最大的output 代表我預測這是哪一類 */
         max = 0;
         for (i = 1; i < target_num; i++) 
         {
