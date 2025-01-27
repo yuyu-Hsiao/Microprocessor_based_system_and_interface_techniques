@@ -12,9 +12,10 @@
 
 ## 系統架構
 ### 實驗器材
-<img src="pic/IMG_1.jpg" alt="專題架構圖1" width="300">
-
-<img src="pic/IMG_2.jpg" alt="專題架構圖2" width="300">
+<div align="center">
+   <img src="pic/IMG_1.jpg" alt="專題架構圖1" width="300">
+   <img src="pic/IMG_2.jpg" alt="專題架構圖2" width="300">
+<div>
 
 ### 電路設計
 ![電路設計](pic/IMG_3.jpg)
