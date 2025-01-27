@@ -63,4 +63,6 @@
   - 使用 Adam 優化器自適應調整學習率以加速收斂。
 
 ## 成果展示
-- 成功辨識訓練資料與測試資料中的顏色分類，達成高準確率。
+[觀看影片](https://youtu.be/ZM5Uk5041LU)
+### 實驗展示影片
+<iframe width="560" height="315" src="https://www.youtube.com/embed/C0VhJuB2X2U?si=gSh-P0Gt-pQsgLlr" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
