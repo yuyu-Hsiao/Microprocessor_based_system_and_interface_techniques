@@ -8,12 +8,23 @@
 ## 實驗列表
 下面是課程中的實驗內容，可以點擊查看每個實驗的詳細說明：
 
-- [Lab 1: 基本顯示與按鍵檢測](./lab1/readme.md) - 使用 NUC140 開發板實作基本的數字顯示和按鍵輸入檢測。
+- [Lab 1: GPIO](./lab1)               
  
-- [Lab 2: UART](./lab2) - UART
-<!--
-- [Lab 3: UART 介面](./lab3/README.md) - 使用 UART 介面進行資料傳輸，並學習通訊協定的實作細節。
--->
+- [Lab 2: UART](./lab2)                
+
+- [Lab 3: ADC](./lab3)        
+
+- [Lab 4: SPI](./lab4)               
+
+- [Lab 5: I2C](./lab5)               
+
+- [Lab 6: TIMER](./lab6)              
+
+- [Lab 7: GPIONT_WDT](./lab7)        
+
+- [Lab 8: Machine Learning](./lab8)   
+
+
 
 ## 課程目標
 修完這堂課，我們應該能夠：
