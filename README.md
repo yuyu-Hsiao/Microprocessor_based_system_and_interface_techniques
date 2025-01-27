@@ -24,6 +24,7 @@
 
 - [Lab 8: Machine Learning](./lab8)   
 
+- [FINAL PROJECT](./final_project)   
 
 
 ## 課程目標
