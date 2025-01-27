@@ -61,8 +61,9 @@
 - 訓練精度達到**95%**以上。
 - 成功分類正方形、圓形、三角形及背景光。
 - 可即時預測物體形狀，並顯示於終端。
-[第七組-基於深度學習預測物體形狀（斜坡版）](https://youtu.be/VYv-9fjrzEA?si=SW8husMmY-UB6VU7)
-[第七組-基於深度學習預測物體形狀（平面版）](https://www.youtube.com/watch?v=C0VhJuB2X2U)
+### video
+- [第七組-基於深度學習預測物體形狀（斜坡版）](https://youtu.be/VYv-9fjrzEA?si=SW8husMmY-UB6VU7)
+- [第七組-基於深度學習預測物體形狀（平面版）](https://www.youtube.com/watch?v=C0VhJuB2X2U)
 
 ## 遇到的困難
 - 光敏電阻輸出數值受外界光影響。
